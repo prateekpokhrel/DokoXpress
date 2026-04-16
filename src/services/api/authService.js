@@ -3,7 +3,7 @@ import { apiClient } from './client';
 import { findAccountByEmail, readMockDatabase, stripPassword, updateMockDatabase } from '../mocks/database';
 import { simulateNetwork } from '../mocks/fakeApi';
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 function buildAuthResponse(account, remember) {
   const session = {
@@ -21,47 +21,42 @@ function buildAuthResponse(account, remember) {
   };
 }
 
-function createId(prefix) {
-  return `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function assertUniqueEmail(email) {
-  const existing = findAccountByEmail(readMockDatabase(), email);
-  if (existing) {
-    throw new Error('An account with this email already exists.');
-  }
-}
-
 export async function login(payload) {
   if (!USE_MOCKS) {
     const response = await apiClient.post('/auth/login', payload);
-    return response.data;
+    const data = response.data;
+    if (data && data.session) {
+      data.session.storage = toStorageMode(payload.remember);
+      data.session.user = data.user;
+      persistSession(data.session);
+    }
+    return data;
   }
 
   return simulateNetwork(() => {
     const database = readMockDatabase();
-    const normalizedEmail = payload.email.trim().toLowerCase();
+    const account = findAccountByEmail(database, payload.email);
 
-    const scope =
-      payload.role === 'user'
-        ? database.users
-        : payload.role === 'vendor'
-          ? database.vendors
-          : database.admins;
-
-    const account = scope.find(
-      (item) => item.email.toLowerCase() === normalizedEmail && item.password === payload.password,
-    );
-
-    if (!account) {
-      throw new Error('Invalid credentials for the selected role.');
+    if (!account || account.password !== payload.password || account.role !== payload.role) {
+      throw new Error('Invalid email, password, or access role.');
     }
 
     return buildAuthResponse(account, payload.remember);
-  }, 650);
+  }, 500);
 }
 
 export async function signInWithGoogle(role, remember) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.post('/auth/google', { role, remember });
+    const data = response.data;
+    if (data && data.session) {
+      data.session.storage = toStorageMode(remember);
+      data.session.user = data.user;
+      persistSession(data.session);
+    }
+    return data;
+  }
+
   return simulateNetwork(() => {
     const database = readMockDatabase();
 
@@ -79,95 +74,78 @@ export async function signInWithGoogle(role, remember) {
 export async function signupCustomer(payload) {
   if (!USE_MOCKS) {
     const response = await apiClient.post('/auth/signup/customer', payload);
-    return response.data;
+    const data = response.data;
+    if (data && data.session) {
+      data.session.storage = toStorageMode(payload.remember);
+      data.session.user = data.user;
+      persistSession(data.session);
+    }
+    return data;
   }
 
   return simulateNetwork(() => {
-    assertUniqueEmail(payload.email);
-
-    const nextUser = {
-      id: createId('usr'),
-      role: 'user',
-      fullName: payload.fullName,
-      email: payload.email.trim().toLowerCase(),
-      phone: payload.phone,
-      password: payload.password,
-      address: payload.address,
-      profilePhoto: payload.profilePhoto,
-      createdAt: new Date().toISOString(),
-    };
-
-    updateMockDatabase((database) => ({
-      ...database,
-      users: [nextUser, ...database.users],
-      carts: {
-        ...database.carts,
-        [nextUser.id]: [],
-      },
-    }));
-
-    return buildAuthResponse(nextUser, payload.remember);
-  }, 700);
+    const database = readMockDatabase();
+    if (findAccountByEmail(database, payload.email)) {
+      throw new Error('An account with this email already exists.');
+    }
+    const newCustomer = { id: `usr_${Date.now()}`, role: 'user', createdAt: new Date().toISOString(), ...payload };
+    updateMockDatabase((draft) => {
+      draft.users.push(newCustomer);
+      draft.carts[newCustomer.id] = [];
+      return draft;
+    });
+    return buildAuthResponse(newCustomer, payload.remember);
+  }, 800);
 }
 
 export async function signupVendor(payload) {
   if (!USE_MOCKS) {
     const response = await apiClient.post('/auth/signup/vendor', payload);
-    return response.data;
+    const data = response.data;
+    if (data && data.session) {
+      data.session.storage = toStorageMode(payload.remember);
+      data.session.user = data.user;
+      persistSession(data.session);
+    }
+    return data;
   }
 
   return simulateNetwork(() => {
-    assertUniqueEmail(payload.email);
-
-    const nextVendor = {
-      id: createId('ven'),
-      role: 'vendor',
-      fullName: payload.fullName,
-      email: payload.email.trim().toLowerCase(),
-      phone: payload.phone,
-      password: payload.password,
-      storeName: payload.storeName,
-      storeAddress: payload.storeAddress,
-      citizenshipDocument: payload.citizenshipDocument,
-      storeLicense: payload.storeLicense,
-      verificationStatus: 'pending',
-      createdAt: new Date().toISOString(),
-    };
-
-    updateMockDatabase((database) => ({
-      ...database,
-      vendors: [nextVendor, ...database.vendors],
-    }));
-
-    return buildAuthResponse(nextVendor, payload.remember);
-  }, 700);
+    const database = readMockDatabase();
+    if (findAccountByEmail(database, payload.email)) {
+      throw new Error('An account with this email already exists.');
+    }
+    const newVendor = { id: `ven_${Date.now()}`, role: 'vendor', verificationStatus: 'pending', createdAt: new Date().toISOString(), ...payload };
+    updateMockDatabase((draft) => {
+      draft.vendors.push(newVendor);
+      return draft;
+    });
+    return buildAuthResponse(newVendor, payload.remember);
+  }, 1000);
 }
 
 export async function signupAdmin(payload) {
   if (!USE_MOCKS) {
     const response = await apiClient.post('/auth/signup/admin', payload);
-    return response.data;
+    const data = response.data;
+    if (data && data.session) {
+      data.session.storage = toStorageMode(payload.remember);
+      data.session.user = data.user;
+      persistSession(data.session);
+    }
+    return data;
   }
 
   return simulateNetwork(() => {
-    assertUniqueEmail(payload.email);
-
-    const nextAdmin = {
-      id: createId('adm'),
-      role: 'admin',
-      fullName: payload.fullName,
-      email: payload.email.trim().toLowerCase(),
-      phone: payload.phone,
-      password: payload.password,
-      department: payload.department,
-      createdAt: new Date().toISOString(),
-    };
-
-    updateMockDatabase((database) => ({
-      ...database,
-      admins: [nextAdmin, ...database.admins],
-    }));
-
-    return buildAuthResponse(nextAdmin, payload.remember);
-  }, 700);
+    const database = readMockDatabase();
+    if (findAccountByEmail(database, payload.email)) {
+      throw new Error('An account with this email already exists.');
+    }
+    const newAdmin = { id: `adm_${Date.now()}`, role: 'admin', createdAt: new Date().toISOString(), ...payload };
+    updateMockDatabase((draft) => {
+      draft.admins.push(newAdmin);
+      return draft;
+    });
+    return buildAuthResponse(newAdmin, payload.remember);
+  }, 600);
 }

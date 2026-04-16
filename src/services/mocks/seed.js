@@ -73,10 +73,10 @@ export const seedDatabase = {
     {
       id: 'adm_1',
       role: 'admin',
-      fullName: 'Nikhil Rao',
-      email: 'admin@dokoxpress.com',
+      fullName: 'Master Admin',
+      email: 'admin.dokoxpress@gmail.com',
       phone: '+91 90000 11111',
-      password: 'Password@123',
+      password: 'Inspiron@15',
       createdAt: '2026-03-01T07:00:00.000Z',
       department: 'Platform Operations',
     },

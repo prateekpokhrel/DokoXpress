@@ -10,18 +10,15 @@ import { FormField } from '@/components/common/FormField';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { adminSignupSchema, customerSignupSchema, vendorSignupSchema } from '@/schemas/authSchemas';
+import { customerSignupSchema, vendorSignupSchema } from '@/schemas/authSchemas';
 import { fileToDataUrl } from '@/utils/files';
 import { DASHBOARD_HOME, ROLE_LABELS } from '@/utils/constants';
 import './SignupPage.css';
 
-// ==========================================
-// SECURITY: Define your master admin email here
-// ==========================================
-const MASTER_ADMIN_EMAIL = import.meta.env?.VITE_ADMIN_EMAIL || 'dokoxpress.admin@email.com';
+const ROLES = ['user', 'vendor'];
 
 export function SignupPage() {
-  const { role, session, signupAsCustomer, signupAsVendor, signupAsAdmin, loginWithGoogle, isAuthBusy } = useAuth();
+  const { role, session, signupAsCustomer, signupAsVendor, loginWithGoogle, isAuthBusy } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [signupRole, setSignupRole] = useState('user');
@@ -29,32 +26,23 @@ export function SignupPage() {
   const customerForm = useForm({
     resolver: zodResolver(customerSignupSchema),
     defaultValues: {
-      fullName: '', email: '', phone: '', password: 'Password@123',
-      country: 'India', state: 'Odisha', city: 'Bhubaneswar', remember: true,
+      fullName: '', email: '', phone: '', password: '',
+      country: '', state: '', city: '', remember: true,
     },
   });
 
   const vendorForm = useForm({
     resolver: zodResolver(vendorSignupSchema),
     defaultValues: {
-      fullName: '', email: '', phone: '', password: 'Password@123',
-      storeName: '', country: 'India', state: 'Odisha', city: 'Bhubaneswar', remember: true,
-    },
-  });
-
-  const adminForm = useForm({
-    resolver: zodResolver(adminSignupSchema),
-    defaultValues: {
-      fullName: '', email: '', phone: '', password: 'Password@123',
-      department: 'Platform Operations', remember: true,
+      fullName: '', email: '', phone: '', password: '',
+      storeName: '', country: '', state: '', city: '', remember: true,
     },
   });
 
   useEffect(() => {
     customerForm.reset();
     vendorForm.reset();
-    adminForm.reset();
-  }, [signupRole, customerForm, vendorForm, adminForm]);
+  }, [signupRole]);
 
   if (role && session) {
     return <Navigate replace to={DASHBOARD_HOME[role]} />;
@@ -64,26 +52,22 @@ export function SignupPage() {
     <AuthLayout
       aside={
         <div className="space-y-6 signup-aside-fade">
-          <div className="rounded-[32px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-2xl">
+          <div className="rounded-[24px] border p-6 shadow-sm" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-500 mb-4">
-              Onboarding protocols
+              Onboarding
             </p>
-            <div className="space-y-4 text-sm font-medium text-white/60">
+            <div className="space-y-4 text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
               <div className="flex gap-3">
                 <div className="h-5 w-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[10px] font-bold">1</div>
-                <p>Customers gain immediate access to the marketplace.</p>
+                <p>Customers get immediate marketplace access.</p>
               </div>
               <div className="flex gap-3">
                 <div className="h-5 w-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 text-[10px] font-bold">2</div>
-                <p>Vendors require document verification before listing products.</p>
-              </div>
-              <div className="flex gap-3">
-                <div className="h-5 w-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 text-[10px] font-bold">3</div>
-                <p>Admins handle regional logistics and vendor approvals.</p>
+                <p>Vendors need document verification before listing.</p>
               </div>
             </div>
           </div>
-          
+
           {signupRole === 'vendor' && (
             <Badge className="bg-orange-500/10 text-orange-400 border-orange-500/20 py-3 w-full justify-center" variant="warning">
               Initial status: Pending Verification
@@ -94,19 +78,19 @@ export function SignupPage() {
       footerLinkLabel="Go to login"
       footerLinkTo="/login"
       footerText="Already have an account?"
-      subtitle="Join the local commerce network. Select your role to get started."
+      subtitle="Join the local commerce network."
       title="Create your account"
     >
       <div className="space-y-8">
-        {/* ================= ROLE SELECTOR TABS ================= */}
-        <div className="role-tab-bar grid grid-cols-3 gap-2 rounded-[20px] bg-white/5 border border-white/10 p-1.5 backdrop-blur-md">
-          {['user', 'vendor', 'admin'].map((candidate) => (
+        {/* Role tabs — only Customer & Vendor */}
+        <div className="grid grid-cols-2 gap-2 rounded-[16px] border p-1.5" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
+          {ROLES.map((candidate) => (
             <button
               key={candidate}
-              className={`rounded-[14px] py-2.5 text-xs font-black uppercase tracking-widest transition-all duration-300 ${
-                signupRole === candidate 
-                  ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] scale-[1.02]' 
-                  : 'text-white/40 hover:text-white hover:bg-white/5'
+              className={`rounded-[12px] py-2.5 text-xs font-black uppercase tracking-widest transition-all duration-300 ${
+                signupRole === candidate
+                  ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)]'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
               }`}
               onClick={() => setSignupRole(candidate)}
               type="button"
@@ -116,7 +100,7 @@ export function SignupPage() {
           ))}
         </div>
 
-        {/* ================= FORMS ================= */}
+        {/* Forms */}
         <div className="signup-form-container">
           {signupRole === 'user' ? (
             <form
@@ -125,13 +109,12 @@ export function SignupPage() {
                 try {
                   const photoFile = values.profilePhoto?.[0];
                   const profilePhoto = photoFile ? await fileToDataUrl(photoFile) : undefined;
-
                   await signupAsCustomer({
                     ...values,
                     address: { country: values.country, state: values.state, city: values.city },
                     profilePhoto,
                   });
-                  showToast({ title: 'Success', description: 'Shopping workspace ready.', variant: 'success' });
+                  showToast({ title: 'Welcome!', description: 'Shopping workspace ready.', variant: 'success' });
                   navigate('/user/products');
                 } catch (error) {
                   showToast({ title: 'Error', description: error.message, variant: 'error' });
@@ -162,14 +145,14 @@ export function SignupPage() {
               </div>
               <label className="checkbox-wrapper md:col-span-2">
                 <input type="checkbox" {...customerForm.register('remember')} />
-                <span>Save session on this device</span>
+                <span>Keep me signed in on this device</span>
               </label>
               <div className="md:col-span-2 space-y-4 pt-2">
                 <Button fullWidth loading={isAuthBusy} type="submit" variant="secondary">Create Customer Account</Button>
                 <GoogleLoginButton label="Continue with Google" loading={isAuthBusy} onClick={() => loginWithGoogle('user', true)} />
               </div>
             </form>
-          ) : signupRole === 'vendor' ? (
+          ) : (
             <form
               className="grid gap-5 md:grid-cols-2 animate-in"
               onSubmit={vendorForm.handleSubmit(async (values) => {
@@ -180,7 +163,7 @@ export function SignupPage() {
                     citizenshipDocument: values.citizenshipDocument?.[0]?.name,
                     storeLicense: values.storeLicense?.[0]?.name,
                   });
-                  showToast({ title: 'Success', description: 'Vendor account created.', variant: 'success' });
+                  showToast({ title: 'Application submitted!', description: 'Pending verification.', variant: 'success' });
                   navigate('/vendor/products');
                 } catch (error) {
                   showToast({ title: 'Error', description: error.message, variant: 'error' });
@@ -217,48 +200,10 @@ export function SignupPage() {
               />
               <label className="checkbox-wrapper md:col-span-2">
                 <input type="checkbox" {...vendorForm.register('remember')} />
-                <span>Verify merchant identity on login</span>
+                <span>Keep me signed in</span>
               </label>
               <div className="md:col-span-2 pt-2">
                 <Button fullWidth loading={isAuthBusy} type="submit" variant="secondary">Submit Vendor Application</Button>
-              </div>
-            </form>
-          ) : (
-            <form
-              className="grid gap-5 md:grid-cols-2 animate-in"
-              onSubmit={adminForm.handleSubmit(async (values) => {
-                try {
-                  // ==========================================
-                  // PROTECTION: Block unauthorized admin signups
-                  // ==========================================
-                  if (values.email.toLowerCase() !== MASTER_ADMIN_EMAIL.toLowerCase()) {
-                    throw new Error("Access Denied: Admin registration is restricted to authorized personnel only.");
-                  }
-
-                  await signupAsAdmin(values);
-                  navigate('/admin/overview');
-                } catch (error) {
-                  showToast({ title: 'Error', description: error.message, variant: 'error' });
-                }
-              })}
-            >
-              <div className="md:col-span-2">
-                <FormField error={adminForm.formState.errors.fullName?.message} label="Admin Full Name" {...adminForm.register('fullName')} />
-              </div>
-              <FormField error={adminForm.formState.errors.email?.message} label="Admin Email" type="email" {...adminForm.register('email')} />
-              <FormField error={adminForm.formState.errors.phone?.message} label="Phone" {...adminForm.register('phone')} />
-              <div className="md:col-span-2">
-                <FormField error={adminForm.formState.errors.department?.message} label="Management Department" {...adminForm.register('department')} />
-              </div>
-              <div className="md:col-span-2">
-                <FormField error={adminForm.formState.errors.password?.message} label="Secure Password" type="password" {...adminForm.register('password')} />
-              </div>
-              <label className="checkbox-wrapper md:col-span-2">
-                <input type="checkbox" {...adminForm.register('remember')} />
-                <span>Enforce session security</span>
-              </label>
-              <div className="md:col-span-2 pt-2">
-                <Button fullWidth loading={isAuthBusy} type="submit" variant="secondary">Authorize Admin Access</Button>
               </div>
             </form>
           )}

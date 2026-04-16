@@ -23,7 +23,7 @@ export function VendorProductsPage() {
   if (!user || user.role !== 'vendor') return null;
 
   const vendorProducts = products
-    .filter((product) => product.vendorId === user.id)
+    .filter((product) => String(product.vendorId) === String(user.id))
     .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime());
 
   return (
@@ -38,7 +38,7 @@ export function VendorProductsPage() {
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-2">Catalog</p>
           <h1 className="font-display text-4xl font-bold text-white tracking-tight">
-            {user.storeName} <span className="text-white/30 text-2xl font-medium">inventory</span>
+            {user.storeName ?? user.fullName ?? user.name ?? 'My Store'} <span className="text-white/30 text-2xl font-medium">inventory</span>
           </h1>
         </div>
         <Button
@@ -83,10 +83,10 @@ export function VendorProductsPage() {
           ))}
         </div>
       ) : vendorProducts.length ? (
-        <div className="overflow-hidden rounded-[32px] border border-white/10 bg-[#0a0a0e] shadow-2xl">
+        <div className="overflow-hidden rounded-[24px] border shadow-sm" style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-card)' }}>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/40">
+              <thead className="text-[10px] font-black uppercase tracking-widest" style={{ backgroundColor: 'var(--bg-subtle)', color: 'var(--text-muted)' }}>
                 <tr>
                   <th className="px-8 py-5">Product Details</th>
                   <th className="px-5 py-5">Category</th>
@@ -98,7 +98,7 @@ export function VendorProductsPage() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {vendorProducts.map((product) => (
-                  <tr key={product.id} className="transition-colors hover:bg-white/[0.02] group">
+                  <tr key={product.id} className="transition-colors hover:bg-slate-50 group" style={{ borderTop: '1px solid var(--border)' }}>
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
                         <img alt={product.name} className="h-16 w-16 rounded-2xl object-cover border border-white/10" src={product.image} />

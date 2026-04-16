@@ -25,28 +25,28 @@ export async function getVendorProducts(vendorId) {
 
 export async function upsertVendorProduct(vendorId, payload) {
   return simulateNetwork(() => {
+    const vendorIdStr = String(vendorId);
     const updated = updateMockDatabase((database) => {
-      const vendor = database.vendors.find((entry) => entry.id === vendorId);
-
-      if (!vendor) {
-        throw new Error('Vendor not found.');
-      }
+      // Find vendor - could be in mock DB or be a real backend user (not in mock DB)
+      const vendor = database.vendors.find((entry) => String(entry.id) === vendorIdStr);
+      // Use storeName if vendor exists in mock DB, otherwise fallback gracefully
+      const vendorName = vendor?.storeName ?? payload.storeName ?? 'My Store';
 
       const existing = payload.id
-        ? database.products.find((product) => product.id === payload.id && product.vendorId === vendorId)
+        ? database.products.find((product) => product.id === payload.id && String(product.vendorId) === vendorIdStr)
         : undefined;
 
       const nextProduct = existing
         ? {
             ...existing,
             ...payload,
-            vendorId,
-            vendorName: vendor.storeName,
+            vendorId: vendorIdStr,
+            vendorName,
           }
         : {
             id: createId('prd'),
-            vendorId,
-            vendorName: vendor.storeName,
+            vendorId: vendorIdStr,
+            vendorName,
             createdAt: new Date().toISOString(),
             ...payload,
           };
@@ -61,18 +61,21 @@ export async function upsertVendorProduct(vendorId, payload) {
       };
     });
 
-    return updated.products.filter((product) => product.vendorId === vendorId);
+    return updated.products.filter((product) => String(product.vendorId) === vendorIdStr);
   }, 650);
 }
 
 export async function deleteVendorProduct(vendorId, productId) {
+  const vendorIdStr = String(vendorId);
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({
       ...database,
-      products: database.products.filter((product) => !(product.vendorId === vendorId && product.id === productId)),
+      products: database.products.filter(
+        (product) => !(String(product.vendorId) === vendorIdStr && product.id === productId)
+      ),
     }));
 
-    return updated.products.filter((product) => product.vendorId === vendorId);
+    return updated.products.filter((product) => String(product.vendorId) === vendorIdStr);
   }, 420);
 }
 

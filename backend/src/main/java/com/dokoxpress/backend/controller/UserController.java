@@ -24,4 +24,9 @@ public class UserController {
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
+
+    @PatchMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User updates) {
+        return userService.updateUser(id, updates);
+    }
 }

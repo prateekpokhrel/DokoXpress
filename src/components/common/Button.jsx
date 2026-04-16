@@ -3,10 +3,10 @@ import { cn } from '@/utils/cn';
 import './Button.css';
 
 const variantStyles = {
-  primary: 'bg-white text-black hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.1)]',
-  secondary: 'bg-gradient-to-r from-orange-500 to-pink-600 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] border-none',
-  ghost: 'bg-white/5 text-white border border-white/10 hover:bg-white/10 hover:border-white/20',
-  danger: 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white',
+  primary: 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm',
+  secondary: 'bg-gradient-to-r from-orange-500 to-pink-600 text-white shadow-sm border-none',
+  ghost: 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200 hover:text-slate-900 hover:border-slate-300',
+  danger: 'bg-red-50 text-red-600 border border-red-100 hover:bg-red-600 hover:text-white',
 };
 
 export function Button({ children, className, variant = 'primary', loading = false, fullWidth = false, disabled, ...props }) {

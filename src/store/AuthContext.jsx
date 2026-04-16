@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { login, signInWithGoogle, signupAdmin, signupCustomer, signupVendor } from '@/services/api/authService';
+import { login, signInWithGoogle, signupCustomer, signupVendor } from '@/services/api/authService';
 import { findAccountById, readMockDatabase, stripPassword } from '@/services/mocks/database';
-import { clearStoredSession, readStoredSession } from '@/utils/token';
+import { clearStoredSession, persistSession, readStoredSession } from '@/utils/token';
 import { useMarketplace } from './MarketplaceContext';
 import './AuthContext.css';
 
@@ -24,6 +24,15 @@ export function AuthProvider({ children }) {
       return;
     }
 
+    // If the session already contains a cached user object (from backend login), use it directly
+    if (storedSession.user) {
+      setSession(storedSession);
+      setUser(storedSession.user);
+      setIsInitializing(false);
+      return;
+    }
+
+    // Fallback: try to find in mock database
     const database = snapshot ?? readMockDatabase();
     const account = findAccountById(database, storedSession.userId);
 
@@ -42,7 +51,6 @@ export function AuthProvider({ children }) {
 
   async function handleAuth(promise) {
     setIsAuthBusy(true);
-
     try {
       const response = await promise;
       setSession(response.session);
@@ -50,6 +58,16 @@ export function AuthProvider({ children }) {
       await refreshSnapshot();
     } finally {
       setIsAuthBusy(false);
+    }
+  }
+
+  // Called after profile updates to keep session.user in sync with latest data
+  function updateSessionUser(updatedUser) {
+    setUser((prev) => ({ ...prev, ...updatedUser }));
+    const storedSession = readStoredSession();
+    if (storedSession) {
+      storedSession.user = { ...(storedSession.user ?? {}), ...updatedUser };
+      persistSession(storedSession);
     }
   }
 
@@ -61,6 +79,7 @@ export function AuthProvider({ children }) {
         role: session?.role ?? null,
         isInitializing,
         isAuthBusy,
+        updateSessionUser,
         loginWithPassword: async (payload) => {
           await handleAuth(login(payload));
         },
@@ -69,9 +88,6 @@ export function AuthProvider({ children }) {
         },
         signupAsVendor: async (payload) => {
           await handleAuth(signupVendor(payload));
-        },
-        signupAsAdmin: async (payload) => {
-          await handleAuth(signupAdmin(payload));
         },
         loginWithGoogle: async (role, remember) => {
           await handleAuth(signInWithGoogle(role, remember));
@@ -90,10 +106,6 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider.');
-  }
-
+  if (!context) throw new Error('useAuth must be used within AuthProvider.');
   return context;
 }

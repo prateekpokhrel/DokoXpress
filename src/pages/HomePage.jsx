@@ -155,21 +155,6 @@ export function HomePage() {
         />
       </section>
 
-      {/* ── MARQUEE STRIP ── */}
-      <div className="hp-marquee-wrap">
-        <div className="hp-marquee-track">
-          {[
-            'Real-time Orders', 'Multi-vendor', 'Fast Delivery', 'Secure Checkout',
-            'Live Analytics', 'Vendor Approval', 'Product Sync', 'Smart Routing',
-            'Real-time Orders', 'Multi-vendor', 'Fast Delivery', 'Secure Checkout',
-            'Live Analytics', 'Vendor Approval', 'Product Sync', 'Smart Routing',
-          ].map((item, i) => (
-            <span key={i} className="hp-marquee-item">
-              <Zap className="hp-marquee-icon" />{item}
-            </span>
-          ))}
-        </div>
-      </div>
 
     </div>
   );

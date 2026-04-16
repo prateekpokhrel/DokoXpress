@@ -13,13 +13,18 @@ import {
 
 const MarketplaceContext = createContext(null);
 
+// Will be injected from AuthContext via MarketplaceProvider props
+let _updateSessionUser = null;
+export function injectSessionUserUpdater(fn) {
+  _updateSessionUser = fn;
+}
+
 export function MarketplaceProvider({ children }) {
   const [snapshot, setSnapshot] = useState(null);
   const [isHydrating, setIsHydrating] = useState(true);
 
   async function refreshSnapshot() {
     setIsHydrating(true);
-
     try {
       const nextSnapshot = await getMarketplaceSnapshot();
       setSnapshot(nextSnapshot);
@@ -33,8 +38,9 @@ export function MarketplaceProvider({ children }) {
   }, []);
 
   async function syncAfter(promise) {
-    await promise;
+    const result = await promise;
     await refreshSnapshot();
+    return result;
   }
 
   return (
@@ -43,9 +49,9 @@ export function MarketplaceProvider({ children }) {
         snapshot,
         isHydrating,
         refreshSnapshot,
-        users: (snapshot?.users ?? []).map(({ password: _password, ...user }) => user),
-        vendors: (snapshot?.vendors ?? []).map(({ password: _password, ...vendor }) => vendor),
-        admins: (snapshot?.admins ?? []).map(({ password: _password, ...admin }) => admin),
+        users: (snapshot?.users ?? []).map(({ password: _p, ...u }) => u),
+        vendors: (snapshot?.vendors ?? []).map(({ password: _p, ...v }) => v),
+        admins: (snapshot?.admins ?? []).map(({ password: _p, ...a }) => a),
         products: snapshot?.products ?? [],
         getUserCart: getCart,
         addItemToCart: addToCart,
@@ -67,10 +73,15 @@ export function MarketplaceProvider({ children }) {
           await syncAfter(approveVendor(vendorId));
         },
         saveCustomerProfile: async (userId, updates) => {
-          await syncAfter(updateCustomerProfile(userId, updates));
+          const result = await syncAfter(updateCustomerProfile(userId, updates));
+          // Persist updated user into the session so it survives page refresh
+          if (_updateSessionUser && result) _updateSessionUser(result);
+          return result;
         },
         saveVendorProfile: async (vendorId, updates) => {
-          await syncAfter(updateVendorProfile(vendorId, updates));
+          const result = await syncAfter(updateVendorProfile(vendorId, updates));
+          if (_updateSessionUser && result) _updateSessionUser(result);
+          return result;
         },
       }}
     >
@@ -81,10 +92,6 @@ export function MarketplaceProvider({ children }) {
 
 export function useMarketplace() {
   const context = useContext(MarketplaceContext);
-
-  if (!context) {
-    throw new Error('useMarketplace must be used within MarketplaceProvider.');
-  }
-
+  if (!context) throw new Error('useMarketplace must be used within MarketplaceProvider.');
   return context;
 }

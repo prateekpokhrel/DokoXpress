@@ -129,42 +129,54 @@ export function UserProductsPage() {
         title="Customer dashboard"
       />
 
+      {/* Promotional Discount Ad Banner */}
+      <div
+        className="relative overflow-hidden rounded-[24px] border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 sm:flex sm:items-center sm:justify-between shadow-sm"
+      >
+        <div className="relative z-10">
+          <p className="text-xs font-black uppercase tracking-widest text-indigo-500">Flash Deal</p>
+          <h2 className="mt-1 font-display text-2xl font-bold text-indigo-950">50% Off Brand Partners</h2>
+          <p className="mt-1 text-sm font-medium text-indigo-700 max-w-md">Get exclusive discounts from top local brands today. Apply code <strong>BRANDS50</strong> at checkout.</p>
+        </div>
+        <button className="relative z-10 mt-4 whitespace-nowrap rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-indigo-700 sm:mt-0">
+          Claim Offer
+        </button>
+      </div>
+
       <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
-        <Card className="bg-[#0a0a0e] border border-white/5 text-white card-hover-effect">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-200">Express shopping</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold">Curated items for your city</h2>
+        <Card className="card-hover-effect">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-500">Express shopping</p>
+          <h2 className="mt-3 font-display text-3xl font-semibold text-slate-800">Curated items for your city</h2>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Badge className="bg-white/10 text-white" variant="neutral">
+            <Badge className="bg-slate-100 text-slate-700" variant="neutral">
               <MapPin className="mr-1 h-3.5 w-3.5" />
               Address: {user.address?.city}, {user.address?.state}
             </Badge>
-            <Badge className="bg-white/10 text-white" variant="neutral">
+            <Badge className="bg-slate-100 text-slate-700" variant="neutral">
               <Clock3 className="mr-1 h-3.5 w-3.5" />
               Fastest ETA: 15 minutes
             </Badge>
           </div>
         </Card>
 
-        <Card className="bg-[#0a0a0e] border border-white/5 card-hover-effect">
-          <p className="text-sm font-medium text-slate-400">Active cart total</p>
-          {/* Changed text-ink to text-white for dark mode visibility */}
-          <p className="mt-3 font-display text-4xl font-semibold text-white">{formatCurrency(cartTotal)}</p>
+        <Card className="card-hover-effect">
+          <p className="text-sm font-medium text-slate-500">Active cart total</p>
+          <p className="mt-3 font-display text-4xl font-semibold text-slate-900">{formatCurrency(cartTotal)}</p>
           <div className="mt-5 grid gap-3">
-            {/* Replaced bg-slate-50 with translucent dark backgrounds */}
-            <div className="rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
+            <div className="rounded-2xl bg-slate-50 border px-4 py-3">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">15-min badge</p>
-              <p className="mt-1 text-sm text-slate-400">Shown only on items flagged for express delivery.</p>
+              <p className="mt-1 text-sm text-slate-600">Shown only on items flagged for express delivery.</p>
             </div>
-            <div className="rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
+            <div className="rounded-2xl bg-slate-50 border px-4 py-3">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Location logic</p>
-              <p className="mt-1 text-sm text-slate-400">Products matching {user.address?.city} float to the top.</p>
+              <p className="mt-1 text-sm text-slate-600">Products matching {user.address?.city} float to the top.</p>
             </div>
           </div>
         </Card>
       </div>
 
-      {/* Wrapped in an override class to force the internal filter components into dark mode */}
-      <div className="dark-theme-filters">
+      {/* Removed dark-theme-filters override */}
+      <div>
         <ProductFilters filters={filters} locations={locations} onChange={setFilters} />
       </div>
 
@@ -179,8 +191,8 @@ export function UserProductsPage() {
           {filteredProducts.map((product, index) => (
             <div key={product.id} className="relative product-grid-item" style={{ animationDelay: `${index * 50}ms` }}>
               {product.locationTag === user.address?.city && (
-                /* MOVED BADGE: Absolute right-5 instead of left-5 prevents overlap. Added dark/blur styles. */
-                <Badge className="absolute right-5 top-5 bg-orange-500/10 text-orange-400 border-orange-500/20 px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
+                /* MOVED BADGE: Absolute right-5 instead of left-5 prevents overlap. Added light theme styles. */
+                <Badge className="absolute right-5 top-5 bg-orange-50 text-orange-600 border px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
                   <MapPin className="mr-1 h-3.5 w-3.5" />
                   Local pick-up
                 </Badge>

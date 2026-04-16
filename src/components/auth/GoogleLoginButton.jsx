@@ -5,19 +5,21 @@ export function GoogleLoginButton({
   onClick,
   loading = false,
   label = 'Continue with Google',
+
 }) {
   return (
-    <Button 
-      className="group relative flex items-center justify-center w-full overflow-hidden rounded-[20px] bg-white/5 border border-white/10 px-4 py-4 text-white font-semibold shadow-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:scale-[1.02]" 
-      fullWidth 
-      loading={loading} 
-      onClick={onClick} 
-      type="button" 
-      variant="ghost"
+    <Button
+      className="group relative flex items-center justify-center w-full overflow-hidden rounded-[16px] border px-4 py-4 font-semibold text-slate-800 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:bg-slate-50"
+      style={{ backgroundColor: '#ffffff', borderColor: '#e2eaed' }}
+      fullWidth
+      loading={loading}
+      onClick={onClick}
+      type="button"
+      variant={false}
     >
       {/* Animated Hover Shimmer */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full transition-transform duration-700 group-hover:translate-x-full" />
-      
+
       <span className="relative z-10 flex items-center justify-center gap-3">
         {/* Authentic Google SVG Logo */}
         <svg className="h-5 w-5 drop-shadow-sm" viewBox="0 0 24 24">

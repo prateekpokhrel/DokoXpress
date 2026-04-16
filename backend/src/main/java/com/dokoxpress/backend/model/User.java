@@ -19,4 +19,23 @@ public class User {
     private String email;
     private String password;
     private String role;
+
+    // Contact & Location
+    private String phone;
+    private String country;
+    private String state;
+    private String city;
+
+    // Vendor Specific
+    private String storeName;
+
+    // Base64 or Image paths (use LONGTEXT for base64 flexibility)
+    @Column(columnDefinition = "LONGTEXT")
+    private String profilePhoto;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String citizenshipDocument;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String storeLicense;
 }

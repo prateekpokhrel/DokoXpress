@@ -126,6 +126,48 @@ export function AdminOverviewPage() {
           <p className="mt-2 font-display text-3xl font-semibold text-ink">{pendingVendors.length}</p>
         </Card>
       </div>
+
+      <Card>
+        <SectionHeader
+          description="Detailed log of each individual item's movement through the marketplace."
+          eyebrow="Logistics"
+          title="Item Movement Data"
+        />
+        <div className="mt-6 overflow-x-auto hide-scrollbar">
+          <table className="w-full text-left text-sm text-slate-600">
+            <thead>
+              <tr className="border-b text-slate-500" style={{ borderColor: 'var(--border)' }}>
+                <th className="pb-3 pr-4 font-semibold">Date</th>
+                <th className="pb-3 pr-4 font-semibold">Item Name</th>
+                <th className="pb-3 pr-4 font-semibold">Qty</th>
+                <th className="pb-3 pr-4 font-semibold">Value</th>
+                <th className="pb-3 pr-4 font-semibold">Buyer</th>
+                <th className="pb-3 font-semibold">Seller</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y" style={{ divideColor: 'var(--border)' }}>
+              {(snapshot?.orders ?? [])
+                .flatMap(order => order.items.map(item => ({ ...item, order })))
+                .sort((a, b) => new Date(b.order.placedAt).getTime() - new Date(a.order.placedAt).getTime())
+                .map((itemMovement, idx) => (
+                  <tr key={`${itemMovement.order.id}-${itemMovement.productId}-${idx}`} className="transition-colors hover:bg-slate-50/50">
+                    <td className="py-3 pr-4">{formatDateTime(itemMovement.order.placedAt)}</td>
+                    <td className="py-3 pr-4 font-medium text-ink">{itemMovement.name}</td>
+                    <td className="py-3 pr-4">{itemMovement.quantity}x</td>
+                    <td className="py-3 pr-4 text-emerald-600 font-medium">{formatCurrency(itemMovement.price * itemMovement.quantity)}</td>
+                    <td className="py-3 pr-4">{itemMovement.order.userName}</td>
+                    <td className="py-3">{itemMovement.order.vendorName}</td>
+                  </tr>
+                ))}
+              {snapshot?.orders?.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-4 text-center text-slate-400">No movement data recorded yet.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   );
 }

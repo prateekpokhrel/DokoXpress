@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -22,6 +22,8 @@ const vendorProfileSchema = z.object({
   country: z.string().min(2, "Country is required"),
   state: z.string().min(2, "State is required"),
   city: z.string().min(2, "City is required"),
+  citizenshipDocument: z.string().optional(),
+  storeLicense: z.string().optional(),
 });
 
 export function VendorProfilePage() {
@@ -29,9 +31,13 @@ export function VendorProfilePage() {
   const { saveVendorProfile } = useMarketplace();
   const { showToast } = useToast();
   
+  const [citizenshipPreview, setCitizenshipPreview] = useState('');
+  const [licensePreview, setLicensePreview] = useState('');
+  
   const {
     register,
     reset,
+    setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -43,6 +49,8 @@ export function VendorProfilePage() {
       country: '',
       state: '',
       city: '',
+      citizenshipDocument: '',
+      storeLicense: '',
     },
   });
 
@@ -59,12 +67,28 @@ export function VendorProfilePage() {
       country: user.storeAddress?.country || '',
       state: user.storeAddress?.state || '',
       city: user.storeAddress?.city || '',
+      citizenshipDocument: user.citizenshipDocument || '',
+      storeLicense: user.storeLicense || '',
     });
+    setCitizenshipPreview(user.citizenshipDocument || '');
+    setLicensePreview(user.storeLicense || '');
   }, [reset, user]);
 
   if (!user || user.role !== 'vendor') {
     return null;
   }
+
+  const handleDocumentChange = (field, setPreview) => (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result.toString();
+      setPreview(result);
+      setValue(field, result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="space-y-5 vendor-page-fade-in">
@@ -76,18 +100,24 @@ export function VendorProfilePage() {
       <div className="grid gap-5 xl:grid-cols-[0.85fr_1.15fr]">
         
         {/* ================= LEFT: VENDOR SUMMARY CARD ================= */}
-        <Card className="bg-ink text-white vendor-card-animate">
-          <div className="flex items-center gap-3">
-            <div className="grid h-14 w-14 place-items-center rounded-3xl bg-white/10 shadow-inner">
+        <Card
+          className="border p-8 shadow-sm flex flex-col vendor-card-animate"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+        >
+          <div className="flex items-center gap-4 border-b pb-6" style={{ borderColor: 'var(--border)' }}>
+            <div
+              className="grid h-16 w-16 place-items-center rounded-2xl border shadow-sm"
+              style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
+            >
               {user.verificationStatus === 'verified' ? (
-                <BadgeCheck className="h-7 w-7 text-emerald-400" />
+                <BadgeCheck className="h-8 w-8 text-emerald-500" />
               ) : (
-                <ShieldAlert className="h-7 w-7 text-amber-400" />
+                <ShieldAlert className="h-8 w-8 text-amber-500" />
               )}
             </div>
             <div>
-              <p className="font-display text-2xl font-semibold tracking-tight">{user.storeName}</p>
-              <p className="mt-1 text-sm text-white/70">{user.email}</p>
+              <p className="font-display text-2xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>{user.storeName}</p>
+              <p className="mt-1 text-sm font-medium" style={{ color: 'var(--text-muted)' }}>{user.email}</p>
             </div>
           </div>
           
@@ -95,31 +125,41 @@ export function VendorProfilePage() {
             <Badge variant={getVerificationVariant(user.verificationStatus)}>
               {user.verificationStatus}
             </Badge>
-            <Badge className="bg-white/10 text-white border border-white/5" variant="neutral">
+            <Badge className="border shadow-sm" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)', color: 'var(--text-main)' }} variant="neutral">
               {user.storeAddress?.city || 'No City'}, {user.storeAddress?.state || 'No State'}
             </Badge>
           </div>
           
-          <div className="mt-8 space-y-4 rounded-3xl bg-white/5 border border-white/10 p-5 shadow-sm">
-            <div className="flex items-start gap-3">
-              <FileBadge2 className="mt-1 h-5 w-5 text-orange-400" />
+          <div
+            className="mt-8 space-y-4 rounded-2xl border p-5 shadow-sm"
+            style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
+          >
+            <div className="flex items-start gap-4 border-b pb-4" style={{ borderColor: 'var(--border)' }}>
+              <FileBadge2 className="mt-1 h-5 w-5 text-orange-500" />
               <div>
-                <p className="font-semibold text-white">Citizenship document</p>
-                <p className="mt-1 text-sm text-white/50">{user.citizenshipDocument ?? 'Not uploaded'}</p>
+                <p className="font-semibold" style={{ color: 'var(--text-main)' }}>Citizenship document</p>
+                <p className="mt-1 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                  {user.citizenshipDocument ? '✅ Document attached automatically' : '❌ Not uploaded yet'}
+                </p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <FileBadge2 className="mt-1 h-5 w-5 text-orange-400" />
+            <div className="flex items-start gap-4 pt-2">
+              <FileBadge2 className="mt-1 h-5 w-5 text-orange-500" />
               <div>
-                <p className="font-semibold text-white">Store license</p>
-                <p className="mt-1 text-sm text-white/50">{user.storeLicense ?? 'Not uploaded'}</p>
+                <p className="font-semibold" style={{ color: 'var(--text-main)' }}>Store license</p>
+                <p className="mt-1 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                  {user.storeLicense ? '✅ License attached automatically' : '❌ Not uploaded yet'}
+                </p>
               </div>
             </div>
           </div>
         </Card>
 
         {/* ================= RIGHT: UPDATE FORM CARD ================= */}
-        <Card className="vendor-card-animate" style={{ animationDelay: '100ms' }}>
+        <Card
+          className="border shadow-sm vendor-card-animate"
+          style={{ animationDelay: '100ms', backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+        >
           <SectionHeader
             description="Fields here mirror a vendor profile update workflow and keep store information consistent across the platform."
             eyebrow="Store profile"
@@ -138,6 +178,8 @@ export function VendorProfilePage() {
                     state: values.state,
                     city: values.city,
                   },
+                  citizenshipDocument: values.citizenshipDocument || undefined,
+                  storeLicense: values.storeLicense || undefined,
                 });
                 showToast({
                   title: 'Vendor profile updated',
@@ -164,6 +206,36 @@ export function VendorProfilePage() {
             
             <div className="md:col-span-2">
               <FormField error={errors.city?.message} label="City" placeholder="e.g. Los Angeles" {...register('city')} />
+            </div>
+
+            <div className="md:col-span-2 mt-2">
+              <span className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-main)' }}>Citizenship Document</span>
+              <label className="flex items-center justify-center w-full h-24 px-4 transition border-2 border-dashed rounded-xl appearance-none cursor-pointer hover:border-orange-400 focus:outline-none" style={{ borderColor: 'var(--border)' }}>
+                <span className="flex items-center space-x-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <span className="font-medium text-slate-600">
+                    {citizenshipPreview ? 'Document selected (click to change)' : 'Drop files to Attach, or browse'}
+                  </span>
+                </span>
+                <input type="file" name="file_upload" className="hidden" accept="image/*,.pdf" onChange={handleDocumentChange('citizenshipDocument', setCitizenshipPreview)} />
+              </label>
+            </div>
+
+            <div className="md:col-span-2 mt-2">
+              <span className="block text-sm font-semibold mb-2" style={{ color: 'var(--text-main)' }}>Store License / Registration</span>
+              <label className="flex items-center justify-center w-full h-24 px-4 transition border-2 border-dashed rounded-xl appearance-none cursor-pointer hover:border-orange-400 focus:outline-none" style={{ borderColor: 'var(--border)' }}>
+                <span className="flex items-center space-x-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <span className="font-medium text-slate-600">
+                    {licensePreview ? 'License selected (click to change)' : 'Drop files to Attach, or browse'}
+                  </span>
+                </span>
+                <input type="file" name="file_upload" className="hidden" accept="image/*,.pdf" onChange={handleDocumentChange('storeLicense', setLicensePreview)} />
+              </label>
             </div>
             
             <div className="md:col-span-2 mt-4 flex justify-end">

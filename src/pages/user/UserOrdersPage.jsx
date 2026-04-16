@@ -32,7 +32,7 @@ export function UserOrdersPage() {
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-2">
           Purchases
         </p>
-        <h2 className="font-display text-3xl font-bold text-white tracking-tight">Recent activity</h2>
+        <h2 className="font-display text-3xl font-bold tracking-tight" style={{ color: 'var(--text-main)' }}>Recent activity</h2>
       </div>
 
       {isHydrating ? (
@@ -47,27 +47,28 @@ export function UserOrdersPage() {
           {orders.map((order) => (
             <div 
               key={order.id} 
-              className="order-card-glow relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0a0a0e] p-6 sm:p-8 transition-all duration-300 hover:border-white/20"
+              className="relative overflow-hidden rounded-[32px] border p-6 sm:p-8 transition-all duration-300"
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
               <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
                 
                 {/* LEFT: Order Content */}
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-4 mb-2">
-                    <h2 className="font-display text-3xl font-black text-white tracking-tighter">
+                    <h2 className="font-display text-3xl font-black tracking-tighter" style={{ color: 'var(--text-main)' }}>
                       {order.vendorName}
                     </h2>
                     <Badge className="px-3 py-1 font-black text-[10px]" variant={getOrderVariant(order.status)}>
                       {order.status}
                     </Badge>
                     {order.fastDeliveryEligible && (
-                      <Badge className="bg-orange-500/10 text-orange-400 border-orange-500/20 px-3 py-1 text-[10px]">
+                      <Badge className="bg-orange-50 text-orange-600 border px-3 py-1 text-[10px]">
                         ⚡ 15-MIN EXPRESS
                       </Badge>
                     )}
                   </div>
                   
-                  <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-6">
+                  <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--text-muted)' }}>
                     Placed {formatDateTime(order.placedAt)} <span className="mx-2 opacity-50">•</span> ETA {formatDateTime(order.deliveryEta)}
                   </p>
                   
@@ -76,16 +77,18 @@ export function UserOrdersPage() {
                       /* FIX: Solid background (#13131a) to kill the white-box glare */
                       <div 
                         key={item.productId} 
-                        className="group flex items-center gap-5 rounded-[22px] border border-white/5 bg-[#13131a] p-4 transition-all hover:bg-[#1c1c26]"
+                        className="group flex items-center gap-5 rounded-[22px] border p-4 transition-all"
+                        style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
                       >
                         <img 
                           alt={item.name} 
-                          className="h-16 w-16 rounded-[14px] object-cover border border-white/10 shadow-lg group-hover:scale-105 transition-transform" 
+                          className="h-16 w-16 rounded-[14px] object-cover border shadow-sm group-hover:scale-105 transition-transform" 
+                          style={{ borderColor: 'var(--border)' }}
                           src={item.image} 
                         />
                         <div className="flex-1">
-                          <p className="font-bold text-white tracking-wide text-lg">{item.name}</p>
-                          <p className="text-sm font-semibold text-white/40">
+                          <p className="font-bold tracking-wide text-lg" style={{ color: 'var(--text-main)' }}>{item.name}</p>
+                          <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>
                             Qty {item.quantity} <span className="mx-2 opacity-30">|</span> {formatCurrency(item.price)}
                           </p>
                         </div>
@@ -95,16 +98,19 @@ export function UserOrdersPage() {
                 </div>
 
                 {/* RIGHT: Order Summary Box */}
-                {/* FIX: Solid background (#13131a) and better contrast */}
-                <div className="rounded-[28px] border border-white/5 bg-[#13131a] p-6 shadow-inner lg:w-72 flex flex-col justify-center">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">Order total</p>
-                  <p className="font-display text-4xl font-black text-white drop-shadow-md">
+                {/* RIGHT: Order Summary Box */}
+                <div
+                  className="rounded-[28px] border p-6 shadow-sm lg:w-72 flex flex-col justify-center"
+                  style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
+                >
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>Order total</p>
+                  <p className="font-display text-4xl font-black" style={{ color: 'var(--text-main)' }}>
                     {formatCurrency(order.total)}
                   </p>
                   
-                  <div className="mt-6 flex items-center gap-3 border-t border-white/5 pt-5 text-[11px] font-bold text-white/30 uppercase tracking-wider">
+                  <div className="mt-6 flex items-center gap-3 border-t pt-5 text-[11px] font-bold uppercase tracking-wider" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
                     <ClipboardList className="h-4 w-4 text-orange-500" />
-                    ID: <span className="font-mono text-white/50">{order.id}</span>
+                    ID: <span className="font-mono">{order.id}</span>
                   </div>
                 </div>
                 
