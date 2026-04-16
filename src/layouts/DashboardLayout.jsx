@@ -74,8 +74,8 @@ export function DashboardLayout() {
             <div className="relative z-10 flex flex-wrap items-center gap-4">
               {/* User Info Pill */}
               <div className="hidden rounded-full border border-white/10 bg-white/5 px-5 py-2 text-right md:block shadow-inner backdrop-blur-md">
-  <p className="text-sm font-bold text-white">{user.fullName}</p>
-</div>
+              <p className="text-sm font-bold text-white">{user.fullName}</p>
+              </div>
               
               {/* Logout Button */}
               <Button
