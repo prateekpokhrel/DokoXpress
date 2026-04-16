@@ -1,0 +1,6 @@
+/* Styles for Button.jsx */
+
+/* Custom shine effect for secondary button */
+.bg-gradient-to-r:hover {
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.5);
+}

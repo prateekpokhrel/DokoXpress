@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* import AFTER tailwind layers */
+@import './styles/shared/panels.css';

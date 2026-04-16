@@ -1,0 +1,24 @@
+/* panels.css */
+
+/* Glass Panel */
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+}
+
+/* Surface Panel */
+.surface-panel {
+  border-radius: 24px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Ring */
+.section-ring {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 20px 50px -30px rgba(15, 23, 42, 0.28);
+}

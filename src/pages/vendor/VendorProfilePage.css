@@ -1,0 +1,48 @@
+/* Styles for VendorProfilePage.jsx */
+
+/* VendorProfilePage.css */
+
+:root {
+  /* Ensure the ink color maps correctly if not set in tailwind.config.js */
+  --color-ink: #0a0a0e; 
+}
+
+/* Custom Utilities */
+.bg-ink {
+  background-color: var(--color-ink);
+}
+
+.text-ink {
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Animations */
+@keyframes vendorFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes vendorSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vendor-page-fade-in {
+  animation: vendorFadeIn 0.4s ease-out forwards;
+}
+
+.vendor-card-animate {
+  opacity: 0;
+  animation: vendorSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

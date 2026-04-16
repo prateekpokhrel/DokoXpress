@@ -1,0 +1,49 @@
+/* Styles for CartSheet.jsx */
+
+/* ==========================================================================
+   CartSheet.css - Smooth Entrance & Glass Shadows
+   ========================================================================== */
+
+/* Simple fade for the backdrop */
+.cart-overlay {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Slide in from the right with a spring effect */
+.cart-panel {
+  animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: -20px 0 50px -10px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Custom Scrollbar for the cart list */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
+}
+
+/* Red-fading trash icon hover */
+.hover\:text-red-500:hover {
+  filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.4));
+}

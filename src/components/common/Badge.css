@@ -1,0 +1,6 @@
+/* Styles for Badge.jsx */
+
+.inline-flex {
+  backdrop-filter: blur(4px);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}

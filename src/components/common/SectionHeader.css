@@ -1,0 +1,6 @@
+/* Styles for SectionHeader.jsx */
+
+/* Adds a very subtle text shadow to make headers pop against mesh backgrounds */
+.font-display {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}

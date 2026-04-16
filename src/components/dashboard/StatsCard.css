@@ -1,0 +1,12 @@
+/* Styles for StatsCard.jsx */
+
+/* ==========================================================================
+   StatsCard.css - Premium Dashboard Metrics
+   ========================================================================== */
+
+/* Drops a heavy shadow beneath the card, while adding a faint inner white ring to mimic glass thickness */
+.stat-card-glow {
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.6), 
+    inset 0 0 20px -5px rgba(255, 255, 255, 0.03);
+}

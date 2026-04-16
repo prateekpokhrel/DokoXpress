@@ -1,0 +1,29 @@
+/* ==========================================================================
+   ProductCard.css - Depth, Interactions & Typography
+   ========================================================================== */
+
+/* 1. PREMIUM SHADOWS
+   Heavy structural drop shadow + faint inner white rim to mimic glass thickness.
+   This prevents the dark card from blending into the dark dashboard background. */
+.product-card-glow {
+  box-shadow: 
+    0 15px 35px -10px rgba(0, 0, 0, 0.7), 
+    inset 0 0 20px -5px rgba(255, 255, 255, 0.02);
+}
+
+/* 2. TEXT TRUNCATION (Line Clamps)
+   Ensures that titles and descriptions truncate with an ellipsis (...) 
+   instead of wrapping infinitely and breaking the grid alignment. */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

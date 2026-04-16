@@ -1,0 +1,47 @@
+/* Styles for FormField.jsx */
+
+/* ==========================================================================
+   FormField.css - Autofill & Polish
+   ========================================================================== */
+
+/* 1. AUTOFILL OVERRIDE 
+   Forces Chrome to keep the input dark even when using saved passwords. */
+.form-field-container input:-webkit-autofill,
+.form-field-container input:-webkit-autofill:hover, 
+.form-field-container input:-webkit-autofill:focus, 
+.form-field-container textarea:-webkit-autofill,
+.form-field-container textarea:-webkit-autofill:hover,
+.form-field-container textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0e inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #f97316 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 2. CURSOR COLOR 
+   Makes the blinking typing line your brand orange. */
+.form-field-container input,
+.form-field-container textarea {
+  caret-color: #f97316;
+}
+
+/* 3. SELECTION COLOR
+   When you highlight text inside the input. */
+.form-field-container input::selection,
+.form-field-container textarea::selection {
+  background: rgba(249, 115, 22, 0.3);
+  color: white;
+}
+
+/* 4. ERROR SHAKE ANIMATION
+   Subtle vibration when an error appears. */
+.shake {
+  animation: field-shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes field-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}

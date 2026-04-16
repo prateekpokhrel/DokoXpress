@@ -1,0 +1,40 @@
+/* Styles for PublicNavbar.jsx */
+
+/* ==========================================================================
+   PublicNavbar.css - Premium Headers & Interactions
+   ========================================================================== */
+
+/* Drops a heavy shadow onto the page content underneath the frosted glass */
+header {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+/* Animated Link Underline
+  Creates an orange bar that sweeps in from the left on hover 
+  and stays locked if the link is active. 
+*/
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #f97316; /* Tailwind orange-500 */
+  transition: width 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+}

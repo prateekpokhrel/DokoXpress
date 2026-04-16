@@ -1,0 +1,59 @@
+/* Styles for LoginPage.jsx */
+/* ==========================================================================
+   LoginPage.css - Form Polish & Autofill Overrides
+   ========================================================================== */
+
+/* 1. WEBKIT AUTOFILL OVERRIDE (CRITICAL)
+   Stops Chrome/Safari from turning inputs yellow/white when autofilling.
+   Forces the background to stay dark and the text to stay white. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  /* Use your dark background color here (#0f0f13 or #0a0a0e) */
+  -webkit-box-shadow: 0 0 0 50px #0a0a0e inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #f97316 !important; /* Orange typing cursor */
+  transition: background-color 5000s ease-in-out 0s; /* Prevents background flash */
+}
+
+/* 2. CUSTOM CARET & PLACEHOLDER
+   Makes the typing cursor match your brand and dims the placeholder text */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  caret-color: #f97316; /* Orange cursor */
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+  font-weight: 400;
+}
+
+/* 3. SMOOTH CHECKBOX ANIMATION
+   Ensures the custom checkmark SVG inside your "Remember Me" box 
+   has a nice snap when clicked. */
+input[type="checkbox"]:checked + svg {
+  animation: checkmark-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes checkmark-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 4. PREVENT ZOOM ON MOBILE
+   Stops iOS Safari from annoyingly zooming in when a user taps an input field. */
+@media screen and (max-width: 768px) {
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    font-size: 16px !important;
+  }
+}
