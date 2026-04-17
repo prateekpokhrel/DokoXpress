@@ -31,6 +31,7 @@ public class ProductService {
         if (updates.getCategory() != null) existing.setCategory(updates.getCategory());
         if (updates.getStatus() != null) existing.setStatus(updates.getStatus());
         if (updates.getImageUrl() != null) existing.setImageUrl(updates.getImageUrl());
+        if (updates.getVendorName() != null) existing.setVendorName(updates.getVendorName());
         return productRepository.save(existing);
     }
 

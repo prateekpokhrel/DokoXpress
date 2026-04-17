@@ -48,9 +48,9 @@ export function VendorOrdersPage() {
       ) : orders.length ? (
         <div className="grid gap-4">
           {orders.map((order, index) => (
-            <Card 
-              key={order.id} 
-              className="order-card-animate border border-white/5 bg-[#0a0a0e]" 
+            <Card
+              key={order.id}
+              className="order-card-animate border border-white/5 bg-[#0a0a0e]"
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
@@ -88,7 +88,7 @@ export function VendorOrdersPage() {
                   <p className="text-sm font-medium text-slate-400">Update status</p>
                   {/* FIXED: Changed bg-white to bg-black/20, text-slate-something to text-white, and updated borders */}
                   <select
-                    className="mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-colors focus:border-coral focus:ring-2 focus:ring-coral/20"
+                    className="status-select mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-all focus:border-coral focus:ring-2 focus:ring-coral/20"
                     onChange={(event) => {
                       void updateOrderStatus(user.id, order.id, event.target.value)
                         .then(() =>

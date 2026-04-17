@@ -56,10 +56,10 @@ export function Sidebar({ role }) {
       <div className="mt-auto rounded-[18px] p-4 border" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-2 mb-1">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">System Ready</p>
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">DokoXpress</p>
         </div>
         <p className="text-xs leading-relaxed text-slate-400">
-          Spring Boot + JWT · MySQL connected
+          नेपालको बजार, अब तपाईंको मोबाइलमा.
         </p>
       </div>
     </aside>

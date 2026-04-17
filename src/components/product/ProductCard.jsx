@@ -113,7 +113,7 @@ export function ProductCard({
             <Button 
               onClick={() => onAddToCart(product.id)} 
               disabled={product.stock === 0}
-              className="relative overflow-hidden rounded-[16px] border border-white/10 bg-white/10 px-5 py-2 font-bold text-white transition-all duration-300 hover:border-orange-400 hover:bg-orange-500 hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] disabled:border-white/10 disabled:bg-white/10 disabled:opacity-50" 
+              className="relative overflow-hidden rounded-[16px] bg-gradient-to-br from-orange-500 to-orange-600 px-6 py-2.5 font-bold text-white shadow-[0_4px_12px_rgba(249,115,22,0.3)] transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_20px_rgba(249,115,22,0.4)] active:scale-95 disabled:opacity-40 disabled:hover:scale-100" 
               type="button" 
             >
               <Plus className="mr-1.5 h-4 w-4" />

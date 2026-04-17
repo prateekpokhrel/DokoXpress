@@ -31,6 +31,7 @@ public class OrderController {
     @PostMapping("/checkout/{userId}")
     @Transactional
     public ResponseEntity<?> checkout(@PathVariable Long userId) {
+        System.out.println("Checkout started for userId: " + userId);
         List<Cart> cartItems = cartRepository.findByUserId(userId);
         if (cartItems.isEmpty()) {
             return ResponseEntity.badRequest().body("Cart is empty");
@@ -42,8 +43,9 @@ public class OrderController {
         // Group cart items by vendor ID to split orders
         Map<Long, List<Cart>> vendorItems = new HashMap<>();
         for (Cart cartItem : cartItems) {
+            if (cartItem.getProductId() == null) continue;
             Product product = productRepository.findById(cartItem.getProductId()).orElse(null);
-            if (product != null) {
+            if (product != null && product.getVendorId() != null) {
                 cartItem.setProduct(product);
                 vendorItems.computeIfAbsent(product.getVendorId(), k -> new ArrayList<>()).add(cartItem);
             }
@@ -63,12 +65,17 @@ public class OrderController {
             order.setUserId(userId);
             order.setVendorId(vendorId);
             order.setStatus("Placed");
+            order.setTotalPrice(0.0);
+            
+            // Initial save to generate ID
             order = orderRepository.save(order);
+            System.out.println("Order created with ID: " + order.getId());
 
             List<OrderItem> orderItems = new ArrayList<>();
             for (Cart cartItem : itemsForVendor) {
                 Product product = cartItem.getProduct();
-                
+                if (product == null) continue;
+
                 // CRITICAL: Reduce stock
                 if (product.getStock() != null && product.getStock() >= cartItem.getQuantity()) {
                     product.setStock(product.getStock() - cartItem.getQuantity());
@@ -90,16 +97,18 @@ public class OrderController {
             }
 
             order.setTotalPrice(vendorTotal);
-            orderRepository.save(order);
-            
             order.setItems(orderItems);
             order.setUserName(customerName);
             order.setVendorName(vendorName);
+            
+            // Final update to price
+            order = orderRepository.save(order);
             placedOrders.add(order);
         }
 
         // Clear user's cart
         cartRepository.deleteAll(cartItems);
+        System.out.println("Checkout successful for userId: " + userId);
 
         return ResponseEntity.ok(placedOrders);
     }

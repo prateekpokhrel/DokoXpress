@@ -13,27 +13,19 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private PasswordEncoder passwordEncoder;
-
     @Override
     public void run(String... args) {
         String adminEmail = "admin.dokoxpress@gmail.com";
 
-        // ✅ Only create if not exists
+        // Only create admin if not exists
         if (userRepository.findByEmail(adminEmail).isEmpty()) {
-
             User admin = new User();
             admin.setEmail(adminEmail);
-            admin.setPassword("Inspiron@15");// 🔥 FIXED
+            admin.setPassword("Inspiron@15");
             admin.setName("Master Admin");
             admin.setRole("admin");
-
             userRepository.save(admin);
-
-            System.out.println("✅ Master Admin created!");
-        } else {
-            System.out.println("ℹ️ Admin already exists, skipping seeding");
+            System.out.println(" Master Admin created!");
         }
     }
 }

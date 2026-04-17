@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cart")
+@org.springframework.transaction.annotation.Transactional
 public class CartController {
 
     @Autowired
@@ -25,19 +26,27 @@ public class CartController {
     public List<Cart> getCart(@PathVariable Long userId) {
         List<Cart> cartItems = cartRepository.findByUserId(userId);
         for (Cart item : cartItems) {
-            Product product = productRepository.findById(item.getProductId()).orElse(null);
-            item.setProduct(product);
+            if (item.getProductId() != null) {
+                Product product = productRepository.findById(item.getProductId()).orElse(null);
+                item.setProduct(product);
+            }
         }
         return cartItems;
     }
 
     @PostMapping("/{userId}")
-    public List<Cart> addToCart(@PathVariable Long userId, @RequestBody Map<String, Long> payload) {
-        Long productId = payload.get("productId");
-        Cart existingItem = cartRepository.findByUserIdAndProductId(userId, productId);
+    @org.springframework.transaction.annotation.Transactional
+    public List<Cart> addToCart(@PathVariable Long userId, @RequestBody CartRequest request) {
+        Long productId = request.getProductId();
+        if (productId == null) return getCart(userId);
+
+        // Handle possible multiple entries gracefully by taking the first one
+        List<Cart> items = cartRepository.findByUserIdAndProductId(userId, productId);
+        Cart existingItem = items.isEmpty() ? null : items.get(0);
         
         if (existingItem != null) {
-            existingItem.setQuantity(existingItem.getQuantity() + 1);
+            int currentQty = existingItem.getQuantity() != null ? existingItem.getQuantity() : 0;
+            existingItem.setQuantity(currentQty + 1);
             cartRepository.save(existingItem);
         } else {
             Cart newItem = new Cart(userId, productId, 1);
@@ -48,11 +57,15 @@ public class CartController {
     }
 
     @PutMapping("/{userId}")
-    public List<Cart> updateCartQuantity(@PathVariable Long userId, @RequestBody Map<String, Object> payload) {
-        Long productId = Long.valueOf(payload.get("productId").toString());
-        Integer quantity = Integer.valueOf(payload.get("quantity").toString());
+    @org.springframework.transaction.annotation.Transactional
+    public List<Cart> updateCartQuantity(@PathVariable Long userId, @RequestBody CartRequest request) {
+        Long productId = request.getProductId();
+        Integer quantity = request.getQuantity();
         
-        Cart existingItem = cartRepository.findByUserIdAndProductId(userId, productId);
+        if (productId == null || quantity == null) return getCart(userId);
+
+        List<Cart> items = cartRepository.findByUserIdAndProductId(userId, productId);
+        Cart existingItem = items.isEmpty() ? null : items.get(0);
         
         if (existingItem != null) {
             if (quantity <= 0) {
@@ -66,11 +79,23 @@ public class CartController {
     }
 
     @DeleteMapping("/{userId}/{productId}")
+    @org.springframework.transaction.annotation.Transactional
     public List<Cart> removeFromCart(@PathVariable Long userId, @PathVariable Long productId) {
-        Cart existingItem = cartRepository.findByUserIdAndProductId(userId, productId);
-        if (existingItem != null) {
-            cartRepository.delete(existingItem);
+        List<Cart> items = cartRepository.findByUserIdAndProductId(userId, productId);
+        if (!items.isEmpty()) {
+            cartRepository.deleteAll(items);
         }
         return getCart(userId);
+    }
+
+    // --- DTO ---
+    public static class CartRequest {
+        private Long productId;
+        private Integer quantity;
+
+        public Long getProductId() { return productId; }
+        public void setProductId(Long productId) { this.productId = productId; }
+        public Integer getQuantity() { return quantity; }
+        public void setQuantity(Integer quantity) { this.quantity = quantity; }
     }
 }

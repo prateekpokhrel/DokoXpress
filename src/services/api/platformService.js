@@ -1,5 +1,4 @@
-import { readMockDatabase } from '../mocks/database';
-import { simulateNetwork } from '../mocks/fakeApi';
+import { normalizeUser } from '@/utils/user';
 import { apiClient } from './client';
 
 export async function getMarketplaceSnapshot() {
@@ -15,87 +14,70 @@ export async function getMarketplaceSnapshot() {
     const realProducts = productsResponse.data;
     const realOrders = ordersResponse.data;
 
-    // Load the mock DB as the base (for carts, orders, etc.)
-    const snapshot = await simulateNetwork(() => readMockDatabase(), 200);
+    // Initialize empty snapshot
+    const snapshot = {
+      users: [],
+      vendors: [],
+      admins: [],
+      products: [],
+      orders: [],
+      carts: {},
+    };
 
     // ── Users ──────────────────────────────────────────────────────────────
-    const mappedRealUsers = realUsers.map((u) => {
-      const isVendor = u.role?.toLowerCase() === 'vendor';
+    const mappedRealUsers = realUsers.map((u) => normalizeUser(u));
+    snapshot.users = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'user' || !u.role);
+    snapshot.vendors = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'vendor');
+    snapshot.admins = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'admin');
+
+    // ── Products ───────────────────────────────────────────────────────────
+    snapshot.products = realProducts
+      .filter((p) => !p.status || p.status === 'ACTIVE' || p.status === 'active')
+      .map((p) => {
+        const vendor = mappedRealUsers.find((u) => String(u.id) === String(p.vendorId));
+        return {
+          ...p,
+          id: String(p.id),
+          vendorId: p.vendorId ? String(p.vendorId) : null,
+          vendorName: vendor?.storeName || vendor?.fullName || 'Unknown Vendor',
+          locationTag: vendor?.address?.city || 'Global',
+          deliveryMinutes: 15,
+          status: p.status?.toLowerCase() ?? 'active',
+          image: p.imageUrl ?? p.image ?? null,
+          isFastDelivery: p.isFastDelivery ?? false,
+          createdAt: p.createdAt ?? new Date().toISOString(),
+        };
+      });
+
+    // ── Orders ────────────────────────────────────────────────────────────
+    snapshot.orders = realOrders.map((o) => {
+      const customer = mappedRealUsers.find((u) => String(u.id) === String(o.userId));
       return {
-        ...u,
-        id: String(u.id),
-        fullName: u.name || u.email,
-        address: { city: u.city ?? 'N/A', state: u.state ?? 'N/A' },
-        // Admin Vendor Page expects storeAddress and storeName
-        storeAddress: isVendor ? { city: u.city ?? 'N/A', state: u.state ?? 'N/A' } : undefined,
-        storeName: isVendor ? (u.storeName || 'Unnamed Store') : undefined,
-        verificationStatus: u.verificationStatus || (isVendor ? 'pending' : 'verified'),
-        citizenshipDocument: u.citizenshipDocument,
-        storeLicense: u.storeLicense,
-        createdAt: u.createdAt ?? new Date().toISOString(),
+        ...o,
+        id: String(o.id),
+        userId: String(o.userId),
+        vendorId: String(o.vendorId),
+        total: o.totalPrice,
+        placedAt: o.createdAt ?? new Date().toISOString(),
+        deliveryAddress: {
+          city: customer?.address?.city || 'Not provided',
+          state: customer?.address?.state || '',
+        },
+        items: (o.items || []).map((item) => ({
+          ...item,
+          id: String(item.id),
+          productId: String(item.productId),
+          name: item.product?.name || 'Unknown Item',
+          image: item.product?.imageUrl || item.product?.image || null,
+          price: item.price,
+        })),
       };
     });
 
-    const regularUsers = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'user' || !u.role);
-    const vendors      = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'vendor');
-
-    snapshot.users = regularUsers;
-
-    const realVendorIds = new Set(vendors.map((v) => v.id));
-    snapshot.vendors = [
-      ...vendors,
-      ...snapshot.vendors.filter((mock) => !realVendorIds.has(mock.id)),
-    ];
-
-    // ── Products ───────────────────────────────────────────────────────────
-    // Normalise backend product shape; backend products replace ALL mock products
-    const mappedRealProducts = realProducts
-      .filter((p) => !p.status || p.status === 'ACTIVE' || p.status === 'active')
-      .map((p) => ({
-        ...p,
-        id: String(p.id),
-        vendorId: p.vendorId ? String(p.vendorId) : null,
-        status: p.status?.toLowerCase() ?? 'active',
-        image: p.imageUrl ?? p.image ?? null,
-        isFastDelivery: p.isFastDelivery ?? false,
-        createdAt: p.createdAt ?? new Date().toISOString(),
-      }));
-
-    // Merge: backend products take precedence; keep mock products that have no backend counterpart
-    const backendProductIds = new Set(mappedRealProducts.map((p) => p.id));
-    snapshot.products = [
-      ...mappedRealProducts,
-      ...snapshot.products.filter((m) => !backendProductIds.has(m.id)),
-    ];
-
-    // ── Orders ────────────────────────────────────────────────────────────
-    const mappedRealOrders = realOrders.map((o) => ({
-      ...o,
-      id: String(o.id),
-      userId: String(o.userId),
-      vendorId: String(o.vendorId),
-      total: o.totalPrice, // Real backend uses totalPrice
-      placedAt: o.createdAt ?? new Date().toISOString(),
-      items: (o.items || []).map((item) => ({
-        ...item,
-        id: String(item.id),
-        productId: String(item.productId),
-        name: item.product?.name || 'Unknown Item',
-        image: item.product?.imageUrl || item.product?.image || null,
-        price: item.price,
-      })),
-    }));
-
-    // Merge: backend orders take precedence
-    const backendOrderIds = new Set(mappedRealOrders.map((o) => o.id));
-    snapshot.orders = [
-      ...mappedRealOrders,
-      ...snapshot.orders.filter((m) => !backendOrderIds.has(m.id)),
-    ];
-
     return snapshot;
   } catch (error) {
-    console.log('Fallback to purely mocked snapshot', error);
-    return simulateNetwork(() => readMockDatabase(), 350);
+    console.error('Platform refresh failed:', error);
+    // Return empty but valid snapshot on error
+    return { users: [], vendors: [], admins: [], products: [], orders: [] };
   }
 }

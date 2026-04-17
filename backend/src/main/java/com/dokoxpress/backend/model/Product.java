@@ -40,6 +40,8 @@ public class Product {
     @Column(name = "image_url", columnDefinition = "LONGTEXT")
     private String imageUrl;
 
+    private String vendorName;
+
     // 🕐 Auto-set by DB default
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -83,5 +85,7 @@ public class Product {
     public void          setStatus(String s)  { this.status = s; }
     public String        getImageUrl()        { return imageUrl; }
     public void          setImageUrl(String i){ this.imageUrl = i; }
+    public String        getVendorName()      { return vendorName; }
+    public void          setVendorName(String vn) { this.vendorName = vn; }
     public LocalDateTime getCreatedAt()       { return createdAt; }
 }

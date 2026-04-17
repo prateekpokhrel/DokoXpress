@@ -1,4 +1,5 @@
 import { createFakeJwt, persistSession, toStorageMode } from '@/utils/token';
+import { normalizeUser } from '@/utils/user';
 import { apiClient } from './client';
 import { findAccountByEmail, readMockDatabase, stripPassword, updateMockDatabase } from '../mocks/database';
 import { simulateNetwork } from '../mocks/fakeApi';
@@ -6,18 +7,20 @@ import { simulateNetwork } from '../mocks/fakeApi';
 const USE_MOCKS = false;
 
 function buildAuthResponse(account, remember) {
+  const normalized = normalizeUser(account);
   const session = {
-    token: createFakeJwt({ sub: account.id, role: account.role, email: account.email }),
-    userId: account.id,
-    role: account.role,
+    token: createFakeJwt({ sub: normalized.id, role: normalized.role, email: normalized.email }),
+    userId: normalized.id,
+    role: normalized.role,
     storage: toStorageMode(remember),
+    user: normalized, // Cache normalized user in session
   };
 
   persistSession(session);
 
   return {
     session,
-    user: stripPassword(account),
+    user: normalized,
   };
 }
 
@@ -26,8 +29,10 @@ export async function login(payload) {
     const response = await apiClient.post('/auth/login', payload);
     const data = response.data;
     if (data && data.session) {
+      const normalized = normalizeUser(data.user);
       data.session.storage = toStorageMode(payload.remember);
-      data.session.user = data.user;
+      data.session.user = normalized;
+      data.user = normalized;
       persistSession(data.session);
     }
     return data;
@@ -50,8 +55,10 @@ export async function signInWithGoogle(role, remember) {
     const response = await apiClient.post('/auth/google', { role, remember });
     const data = response.data;
     if (data && data.session) {
+      const normalized = normalizeUser(data.user);
       data.session.storage = toStorageMode(remember);
-      data.session.user = data.user;
+      data.session.user = normalized;
+      data.user = normalized;
       persistSession(data.session);
     }
     return data;
@@ -76,8 +83,10 @@ export async function signupCustomer(payload) {
     const response = await apiClient.post('/auth/signup/customer', payload);
     const data = response.data;
     if (data && data.session) {
+      const normalized = normalizeUser(data.user);
       data.session.storage = toStorageMode(payload.remember);
-      data.session.user = data.user;
+      data.session.user = normalized;
+      data.user = normalized;
       persistSession(data.session);
     }
     return data;
@@ -103,8 +112,10 @@ export async function signupVendor(payload) {
     const response = await apiClient.post('/auth/signup/vendor', payload);
     const data = response.data;
     if (data && data.session) {
+      const normalized = normalizeUser(data.user);
       data.session.storage = toStorageMode(payload.remember);
-      data.session.user = data.user;
+      data.session.user = normalized;
+      data.user = normalized;
       persistSession(data.session);
     }
     return data;
@@ -129,8 +140,10 @@ export async function signupAdmin(payload) {
     const response = await apiClient.post('/auth/signup/admin', payload);
     const data = response.data;
     if (data && data.session) {
+      const normalized = normalizeUser(data.user);
       data.session.storage = toStorageMode(payload.remember);
-      data.session.user = data.user;
+      data.session.user = normalized;
+      data.user = normalized;
       persistSession(data.session);
     }
     return data;

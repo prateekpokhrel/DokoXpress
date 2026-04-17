@@ -19,7 +19,12 @@ export function UserOrdersPage() {
 
   const orders = (snapshot?.orders ?? [])
     .filter((order) => order.userId === user.id)
-    .sort((left, right) => new Date(right.placedAt).getTime() - new Date(left.placedAt).getTime());
+    .sort((left, right) => {
+      const t1 = new Date(right.placedAt).getTime();
+      const t2 = new Date(left.placedAt).getTime();
+      if (isNaN(t1) || isNaN(t2)) return 0;
+      return t1 - t2;
+    });
 
   return (
     <div className="space-y-8 orders-fade-in">

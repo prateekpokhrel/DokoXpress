@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { normalizeUser } from '@/utils/user';
 import { readMockDatabase, stripPassword, updateMockDatabase } from '../mocks/database';
 import { simulateNetwork } from '../mocks/fakeApi';
 
@@ -18,7 +19,7 @@ export async function updateCustomerProfile(userId, updates) {
       delete payload.address;
     }
     const response = await apiClient.put(`/users/${userId}`, payload);
-    return response.data;
+    return normalizeUser(response.data);
   }
   // ... rest of previous code (keeping it for reference/fallback)
   const userIdStr = String(userId);
@@ -49,7 +50,7 @@ export async function updateVendorProfile(userId, updates) {
       delete payload.storeAddress;
     }
     const response = await apiClient.put(`/users/${userId}`, payload);
-    return response.data;
+    return normalizeUser(response.data);
   }
   
   const userIdStr = String(userId);
@@ -70,7 +71,7 @@ export async function updateVendorProfile(userId, updates) {
 export async function getAccountById(userId) {
   if (!USE_MOCKS) {
     const response = await apiClient.get(`/users/${userId}`);
-    return response.data;
+    return normalizeUser(response.data);
   }
 
   const userIdStr = String(userId);

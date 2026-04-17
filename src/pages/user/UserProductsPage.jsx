@@ -188,21 +188,29 @@ export function UserProductsPage() {
         </div>
       ) : filteredProducts.length ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredProducts.map((product, index) => (
-            <div key={product.id} className="relative product-grid-item" style={{ animationDelay: `${index * 50}ms` }}>
-              {product.locationTag === user.address?.city && (
-                /* MOVED BADGE: Absolute right-5 instead of left-5 prevents overlap. Added light theme styles. */
-                <Badge className="absolute right-5 top-5 bg-orange-50 text-orange-600 border px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
-                  <MapPin className="mr-1 h-3.5 w-3.5" />
-                  Local pick-up
-                </Badge>
-              )}
-              <ProductCard
-                onAddToCart={(productId) => void syncCart(addItemToCart(user.id, productId), 'Added to cart')}
-                product={product}
-              />
-            </div>
-          ))}
+          {filteredProducts.map((product, index) => {
+            const cartItem = cartItems.find((item) => String(item.productId) === String(product.id));
+            const currentQty = cartItem?.quantity ?? 0;
+
+            return (
+              <div key={product.id} className="relative product-grid-item" style={{ animationDelay: `${index * 50}ms` }}>
+                {product.locationTag === user.address?.city && (
+                  /* MOVED BADGE: Absolute right-5 instead of left-5 prevents overlap. Added light theme styles. */
+                  <Badge className="absolute right-5 top-5 z-20 bg-orange-50 text-orange-600 border px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
+                    <MapPin className="mr-1 h-3.5 w-3.5" />
+                    Local pick-up
+                  </Badge>
+                )}
+                <ProductCard
+                  product={product}
+                  cartQuantity={currentQty}
+                  onAddToCart={(productId) => void syncCart(addItemToCart(user.id, productId), 'Added to cart')}
+                  onIncrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty + 1))}
+                  onDecrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty - 1))}
+                />
+              </div>
+            );
+          })}
         </div>
       ) : (
         <EmptyState
