@@ -85,7 +85,6 @@ export function ProductEditorModal({ open, product, onClose, onSubmit }) {
         className="grid gap-x-6 gap-y-2 md:grid-cols-2"
         onSubmit={handleSubmit(async (values) => {
           await onSubmit(values);
-          onClose();
         })}
       >
         <div className="md:col-span-2">

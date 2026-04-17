@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin
 public class AuthController {
 
     @Autowired
@@ -135,9 +134,17 @@ public class AuthController {
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("id", user.getId());
         userMap.put("name", user.getName());
-        userMap.put("fullName", user.getName());
         userMap.put("email", user.getEmail());
         userMap.put("role", user.getRole());
+        userMap.put("phone", user.getPhone());
+        userMap.put("country", user.getCountry());
+        userMap.put("state", user.getState());
+        userMap.put("city", user.getCity());
+        userMap.put("storeName", user.getStoreName());
+        userMap.put("profilePhoto", user.getProfilePhoto());
+        userMap.put("citizenshipDocument", user.getCitizenshipDocument());
+        userMap.put("storeLicense", user.getStoreLicense());
+        userMap.put("verificationStatus", user.getVerificationStatus());
 
         Map<String, Object> response = new HashMap<>();
         response.put("session", session);

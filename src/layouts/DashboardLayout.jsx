@@ -8,6 +8,8 @@ import { ROLE_LABELS } from '@/utils/constants';
 import { cn } from '@/utils/cn';
 import './DashboardLayout.css';
 
+import { PendingVerification } from '@/pages/vendor/PendingVerification';
+
 export function DashboardLayout() {
   const { user, role, logout } = useAuth();
   const navigate = useNavigate();
@@ -16,6 +18,9 @@ export function DashboardLayout() {
 
   if (!role || !user) return null;
 
+  // VERIFICATION GATE: If vendor is pending, show them the pending notice instead of standard dashboard
+  const isPendingVendor = role === 'vendor' && user.verificationStatus === 'pending';
+  
   const displayName = user?.fullName || user?.name || 'User';
 
   return (
@@ -27,7 +32,7 @@ export function DashboardLayout() {
           'fixed inset-y-4 left-4 z-50 w-[260px] transition-transform duration-500 ease-out lg:static lg:inset-auto lg:w-auto',
           sidebarOpen ? 'translate-x-0' : '-translate-x-[120%] lg:translate-x-0'
         )}>
-          <Sidebar role={role} />
+          <Sidebar role={isPendingVendor ? 'user' : role} /> 
         </div>
 
         {/* Mobile overlay */}
@@ -65,7 +70,7 @@ export function DashboardLayout() {
               </Link>
 
               <span className="hidden sm:inline-block rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-orange-500">
-                {ROLE_LABELS[role]}
+                {isPendingVendor ? 'Onboarding' : ROLE_LABELS[role]}
               </span>
             </div>
 
@@ -90,7 +95,7 @@ export function DashboardLayout() {
 
           {/* PAGE CONTENT */}
           <div className="min-h-[calc(100vh-120px)] w-full pb-10">
-            <Outlet />
+            {isPendingVendor ? <PendingVerification /> : <Outlet />}
           </div>
         </div>
       </div>

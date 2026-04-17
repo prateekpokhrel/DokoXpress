@@ -4,6 +4,7 @@ import com.dokoxpress.backend.model.User;
 import com.dokoxpress.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,17 +13,27 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
+
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         String adminEmail = "admin.dokoxpress@gmail.com";
+
+        // ✅ Only create if not exists
         if (userRepository.findByEmail(adminEmail).isEmpty()) {
+
             User admin = new User();
             admin.setEmail(adminEmail);
-            admin.setPassword("Inspiron@15");
+            admin.setPassword("Inspiron@15");// 🔥 FIXED
             admin.setName("Master Admin");
             admin.setRole("admin");
+
             userRepository.save(admin);
-            System.out.println("Master Admin created!");
+
+            System.out.println("✅ Master Admin created!");
+        } else {
+            System.out.println("ℹ️ Admin already exists, skipping seeding");
         }
     }
 }

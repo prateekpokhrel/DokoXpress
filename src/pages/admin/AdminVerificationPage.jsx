@@ -52,11 +52,29 @@ export function AdminVerificationPage() {
               <div className="mt-6 space-y-4 rounded-3xl bg-slate-50 p-5">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Citizenship document</p>
-                  <p className="mt-2 text-sm font-medium text-ink">{vendor.citizenshipDocument ?? 'Not provided'}</p>
+                  {vendor.citizenshipDocument?.startsWith('data:image') ? (
+                    <div className="mt-3 relative group overflow-hidden rounded-2xl border border-slate-200 aspect-[1.6/1]">
+                      <img src={vendor.citizenshipDocument} alt="Citizenship" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <Button size="sm" variant="secondary" onClick={() => window.open(vendor.citizenshipDocument)}>View Full</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm font-medium text-ink">{vendor.citizenshipDocument ?? 'Not provided'}</p>
+                  )}
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Store license</p>
-                  <p className="mt-2 text-sm font-medium text-ink">{vendor.storeLicense ?? 'Not provided'}</p>
+                  {vendor.storeLicense?.startsWith('data:image') ? (
+                    <div className="mt-3 relative group overflow-hidden rounded-2xl border border-slate-200 aspect-[1.6/1]">
+                      <img src={vendor.storeLicense} alt="License" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <Button size="sm" variant="secondary" onClick={() => window.open(vendor.storeLicense)}>View Full</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm font-medium text-ink">{vendor.storeLicense ?? 'Not provided'}</p>
+                  )}
                 </div>
               </div>
 

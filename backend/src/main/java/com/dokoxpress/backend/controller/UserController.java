@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -25,8 +24,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User updates) {
-        return userService.updateUser(id, updates);
+    public User updateUserPatch(@PathVariable Long id, @RequestBody java.util.Map<String, Object> updates) {
+        return userService.updateUserWithMap(id, updates);
+    }
+
+    @PutMapping("/{id}")
+    public User updateUserPut(@PathVariable Long id, @RequestBody java.util.Map<String, Object> updates) {
+        return userService.updateUserWithMap(id, updates);
     }
 }

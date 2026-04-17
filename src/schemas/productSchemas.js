@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const productSchema = z.object({
-  id: z.string().optional(),
+  id: z.union([z.string(), z.number()]).optional(),
   name: z.string().min(2, 'Product name is required.'),
   description: z.string().min(12, 'Add a short product description.'),
   category: z.string().min(2, 'Category is required (e.g. Groceries, Clothing).'),
@@ -10,10 +10,10 @@ export const productSchema = z.object({
   status: z.enum(['active', 'draft'], {
     errorMap: () => ({ message: 'Please select a status.' })
   }),
-  image: z.string().min(1, 'Product image is required.'),
-  locationTag: z.string().min(2, 'Location (City/Area) is required.'),
+  image: z.string().optional().default(''),
+  locationTag: z.string().optional().default(''),
   deliveryMinutes: z.coerce.number().int().optional(),
-  isFastDelivery: z.boolean(),
+  isFastDelivery: z.boolean().optional().default(false),
 }).refine((data) => {
   if (data.isFastDelivery && (!data.deliveryMinutes || data.deliveryMinutes < 1)) {
     return false;

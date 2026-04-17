@@ -38,4 +38,18 @@ public class User {
 
     @Column(columnDefinition = "LONGTEXT")
     private String storeLicense;
+
+    @Column(nullable = false)
+    private String verificationStatus;
+
+    @PrePersist
+    public void prePersist() {
+        if (verificationStatus == null) {
+            if ("vendor".equalsIgnoreCase(role)) {
+                verificationStatus = "pending";
+            } else {
+                verificationStatus = "verified";
+            }
+        }
+    }
 }

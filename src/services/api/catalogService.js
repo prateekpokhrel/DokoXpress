@@ -2,7 +2,7 @@ import { apiClient } from './client';
 import { readMockDatabase, updateMockDatabase } from '../mocks/database';
 import { simulateNetwork } from '../mocks/fakeApi';
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 function hydrateCart(database, userId) {
   const userIdStr = String(userId);
@@ -23,7 +23,18 @@ function createId(prefix) {
 export async function getCatalog() {
   if (!USE_MOCKS) {
     const response = await apiClient.get('/products');
-    return response.data;
+    // Normalise backend product shape to match what the UI expects
+    return response.data
+      .filter((p) => !p.status || p.status === 'ACTIVE' || p.status === 'active')
+      .map((p) => ({
+        ...p,
+        id: String(p.id),
+        vendorId: p.vendorId ? String(p.vendorId) : null,
+        status: p.status?.toLowerCase() ?? 'active',
+        image: p.imageUrl ?? p.image ?? null,
+        isFastDelivery: p.isFastDelivery ?? false,
+        createdAt: p.createdAt ?? new Date().toISOString(),
+      }));
   }
 
   return simulateNetwork(() => {
@@ -33,6 +44,10 @@ export async function getCatalog() {
 }
 
 export async function getCart(userId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.get(`/cart/${userId}`);
+    return response.data;
+  }
   const userIdStr = String(userId);
   return simulateNetwork(() => {
     const db = readMockDatabase();
@@ -45,6 +60,10 @@ export async function getCart(userId) {
 }
 
 export async function addToCart(userId, productId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.post(`/cart/${userId}`, { productId: Number(productId) });
+    return response.data;
+  }
   const userIdStr = String(userId);
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => {
@@ -68,6 +87,10 @@ export async function addToCart(userId, productId) {
 }
 
 export async function updateCartQuantity(userId, productId, quantity) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.put(`/cart/${userId}`, { productId: Number(productId), quantity: Number(quantity) });
+    return response.data;
+  }
   const userIdStr = String(userId);
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => {
@@ -86,10 +109,21 @@ export async function updateCartQuantity(userId, productId, quantity) {
 }
 
 export async function removeFromCart(userId, productId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.delete(`/cart/${userId}/${productId}`);
+    return response.data;
+  }
   return updateCartQuantity(userId, productId, 0);
 }
 
 export async function placeOrders(userId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.post(`/orders/checkout/${userId}`);
+    return {
+      cart: [],
+      orders: response.data
+    };
+  }
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => {
       const userIdStr = String(userId);
@@ -174,6 +208,10 @@ export async function placeOrders(userId) {
 }
 
 export async function getUserOrders(userId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.get(`/orders/user/${userId}`);
+    return response.data;
+  }
   return simulateNetwork(
     () =>
       readMockDatabase()

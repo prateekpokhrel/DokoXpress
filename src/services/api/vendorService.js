@@ -2,7 +2,7 @@ import { apiClient } from './client';
 import { readMockDatabase, stripPassword, updateMockDatabase } from '../mocks/database';
 import { simulateNetwork } from '../mocks/fakeApi';
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 function createId(prefix) {
   return `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
@@ -10,8 +10,19 @@ function createId(prefix) {
 
 export async function getVendorProducts(vendorId) {
   if (!USE_MOCKS) {
-    const response = await apiClient.get(`/vendors/${vendorId}/products`);
-    return response.data;
+    const response = await apiClient.get('/products');
+    return response.data
+      .filter((p) => String(p.vendorId) === String(vendorId))
+      .map((p) => ({
+        ...p,
+        id: String(p.id),
+        vendorId: String(p.vendorId),
+        status: p.status?.toLowerCase() ?? 'active',
+        image: p.imageUrl ?? p.image ?? null,
+        isFastDelivery: p.isFastDelivery ?? false,
+        createdAt: p.createdAt ?? new Date().toISOString(),
+      }))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   return simulateNetwork(
@@ -24,12 +35,42 @@ export async function getVendorProducts(vendorId) {
 }
 
 export async function upsertVendorProduct(vendorId, payload) {
+  if (!USE_MOCKS) {
+    const body = {
+      vendorId: Number(vendorId),
+      name: payload.name,
+      description: payload.description ?? '',
+      price: payload.price,
+      stock: payload.stock ?? 0,
+      category: payload.category ?? '',
+      status: (payload.status ?? 'active').toUpperCase(),
+      imageUrl: payload.image ?? payload.imageUrl ?? null,
+    };
+    if (payload.id) {
+      // Update existing product via PUT
+      await apiClient.put(`/products/${payload.id}`, body);
+    } else {
+      await apiClient.post('/products', body);
+    }
+    // Return updated list for this vendor
+    const response = await apiClient.get('/products');
+    return response.data
+      .filter((p) => String(p.vendorId) === String(vendorId))
+      .map((p) => ({
+        ...p,
+        id: String(p.id),
+        vendorId: String(p.vendorId),
+        status: p.status?.toLowerCase() ?? 'active',
+        image: p.imageUrl ?? p.image ?? null,
+        isFastDelivery: false,
+        createdAt: p.createdAt ?? new Date().toISOString(),
+      }));
+  }
+
   return simulateNetwork(() => {
     const vendorIdStr = String(vendorId);
     const updated = updateMockDatabase((database) => {
-      // Find vendor - could be in mock DB or be a real backend user (not in mock DB)
       const vendor = database.vendors.find((entry) => String(entry.id) === vendorIdStr);
-      // Use storeName if vendor exists in mock DB, otherwise fallback gracefully
       const vendorName = vendor?.storeName ?? payload.storeName ?? 'My Store';
 
       const existing = payload.id
@@ -37,28 +78,14 @@ export async function upsertVendorProduct(vendorId, payload) {
         : undefined;
 
       const nextProduct = existing
-        ? {
-            ...existing,
-            ...payload,
-            vendorId: vendorIdStr,
-            vendorName,
-          }
-        : {
-            id: createId('prd'),
-            vendorId: vendorIdStr,
-            vendorName,
-            createdAt: new Date().toISOString(),
-            ...payload,
-          };
+        ? { ...existing, ...payload, vendorId: vendorIdStr, vendorName }
+        : { id: createId('prd'), vendorId: vendorIdStr, vendorName, createdAt: new Date().toISOString(), ...payload };
 
       const products = payload.id
         ? database.products.map((product) => (product.id === payload.id ? nextProduct : product))
         : [nextProduct, ...database.products];
 
-      return {
-        ...database,
-        products,
-      };
+      return { ...database, products };
     });
 
     return updated.products.filter((product) => String(product.vendorId) === vendorIdStr);
@@ -67,6 +94,21 @@ export async function upsertVendorProduct(vendorId, payload) {
 
 export async function deleteVendorProduct(vendorId, productId) {
   const vendorIdStr = String(vendorId);
+  if (!USE_MOCKS) {
+    await apiClient.delete(`/products/${productId}`);
+    const response = await apiClient.get('/products');
+    return response.data
+      .filter((p) => String(p.vendorId) === vendorIdStr)
+      .map((p) => ({
+        ...p,
+        id: String(p.id),
+        vendorId: String(p.vendorId),
+        status: p.status?.toLowerCase() ?? 'active',
+        image: p.imageUrl ?? p.image ?? null,
+        isFastDelivery: false,
+        createdAt: p.createdAt ?? new Date().toISOString(),
+      }));
+  }
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({
       ...database,
@@ -80,6 +122,10 @@ export async function deleteVendorProduct(vendorId, productId) {
 }
 
 export async function getVendorOrders(vendorId) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.get(`/orders/vendor/${vendorId}`);
+    return response.data;
+  }
   return simulateNetwork(
     () =>
       readMockDatabase()
@@ -90,6 +136,12 @@ export async function getVendorOrders(vendorId) {
 }
 
 export async function updateVendorOrderStatus(vendorId, orderId, status) {
+  if (!USE_MOCKS) {
+    const response = await apiClient.patch(`/orders/${orderId}/status`, { status });
+    const updatedOrder = response.data;
+    const allVendorOrders = await getVendorOrders(vendorId);
+    return allVendorOrders;
+  }
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({
       ...database,
