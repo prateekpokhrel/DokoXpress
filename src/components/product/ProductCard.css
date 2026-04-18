@@ -1,19 +1,134 @@
 /* ==========================================================================
-   ProductCard.css - Depth, Interactions & Typography
+   ProductCard.css — CLEAN SHARP UI (No Black Overlay)
    ========================================================================== */
 
-/* 1. PREMIUM SHADOWS
-   Heavy structural drop shadow + faint inner white rim to mimic glass thickness.
-   This prevents the dark card from blending into the dark dashboard background. */
+/* ================= ROOT CARD ================= */
 .product-card-glow {
-  box-shadow: 
-    0 15px 35px -10px rgba(0, 0, 0, 0.7), 
-    inset 0 0 20px -5px rgba(255, 255, 255, 0.02);
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+
+  /* Clean white glass instead of dark muddy bg */
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+
+  /* Soft premium shadow */
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    0 5px 15px rgba(0, 0, 0, 0.15);
+
+  transition: all 0.3s ease;
 }
 
-/* 2. TEXT TRUNCATION (Line Clamps)
-   Ensures that titles and descriptions truncate with an ellipsis (...) 
-   instead of wrapping infinitely and breaking the grid alignment. */
+/* ================= HOVER ================= */
+.product-card-glow:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+/* ================= IMAGE ================= */
+.product-card-glow img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  /* SHARP FIX */
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+
+  transition: transform 0.5s ease;
+}
+
+.product-card-glow:hover img {
+  transform: scale(1.05);
+}
+
+/* ================= REMOVE BLACK OVERLAY ================= */
+/* Instead of dark overlay, use LIGHT FADE */
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+
+  /* 🔥 LIGHT transparent fade */
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.05),
+      transparent);
+}
+
+/* ================= TEXT ================= */
+.product-card-glow h3 {
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.product-card-glow p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ================= PILLS ================= */
+.pill {
+  background: rgba(255, 255, 255, 0.85);
+  color: #222;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.pill:hover {
+  background: white;
+  transform: translateY(-1px);
+}
+
+/* ================= BADGES ================= */
+.badge {
+  background: rgba(255, 255, 255, 0.7);
+  color: #111;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+/* ================= FAST DELIVERY ================= */
+.badge-fast {
+  background: linear-gradient(135deg, #ff7a18, #ffb347);
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+/* ================= STOCK ================= */
+.stock-dot {
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* ================= BUTTON ================= */
+.product-card-glow button[type="button"] {
+  background: linear-gradient(135deg, #ff6a00, #ff8c00);
+  color: white;
+  border-radius: 14px;
+
+  box-shadow:
+    0 5px 15px rgba(255, 120, 0, 0.4);
+
+  transition: all 0.25s ease;
+}
+
+.product-card-glow button[type="button"]:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 10px 25px rgba(255, 120, 0, 0.5);
+}
+
+/* ================= LINE CLAMP ================= */
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;

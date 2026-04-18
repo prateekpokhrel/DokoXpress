@@ -3,118 +3,184 @@ import { Button } from '@/components/common/Button';
 import { formatCurrency } from '@/utils/format';
 import './ProductCard.css';
 
-export function ProductCard({ 
-  product, 
-  cartQuantity = 0, // NEW: Defaults to 0 if not provided
-  onAddToCart, 
-  onIncrement,      // NEW: Function to handle +
-  onDecrement       // NEW: Function to handle -
+/**
+ * Utility: Calculate distance between 2 coordinates (Haversine Formula)
+ */
+function getDistanceInKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * (Math.PI / 180)) *
+    Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export function ProductCard({
+  product,
+  userLocation,
+  cartQuantity = 0,
+  onAddToCart,
+  onIncrement,
+  onDecrement
 }) {
+
+  /* ================= SAFE CITY MATCH ================= */
+  const userCity = userLocation?.city?.trim().toLowerCase();
+  const productCity = product.locationTag?.trim().toLowerCase();
+
+  const isSameCity = userCity && productCity && userCity === productCity;
+
+  /* ================= SAFE DISTANCE ================= */
+  let isWithinRadius = false;
+
+  if (
+    userLocation?.lat &&
+    userLocation?.lng &&
+    product.vendorLat &&
+    product.vendorLng
+  ) {
+    const distance = getDistanceInKm(
+      userLocation.lat,
+      userLocation.lng,
+      product.vendorLat,
+      product.vendorLng
+    );
+
+    isWithinRadius = distance <= 3;
+  }
+
+  /* ================= FINAL DELIVERY LOGIC ================= */
+  const showFastDelivery =
+    product.isFastDelivery &&
+    (
+      isSameCity ||         // city match
+      isWithinRadius ||     // OR nearby
+      !product.vendorLat    // OR fallback if no coords
+    );
+
+  /* ================= RENDER ================= */
   return (
-    // FIX 1: Added `h-full` so every card stretches to the height of the tallest card in the row
-    <div className="product-card-glow group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#0a0a0e] transition-all duration-500 hover:-translate-y-2 hover:border-white/20 hover:bg-[#0f0f13]">
-      
-      {/* ================= IMAGE & BADGES ================= */}
-      {/* FIX 2: Added `shrink-0` to ensure the image container doesn't get squished by flexbox */}
+    <div className="product-card-glow group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 transition-all duration-500 hover:-translate-y-2 hover:border-white/20">
+
+      {/* ================= IMAGE ================= */}
       <div className="relative h-56 shrink-0 overflow-hidden">
-        {/* Cinematic Zoom on Hover */}
-        <img 
-          alt={product.name} 
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" 
-          src={product.image} 
+        <img
+          alt={product.name}
+          src={product.image}
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover"
+          style={{
+            imageRendering: 'auto',
+            backfaceVisibility: 'hidden'
+          }}
         />
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent opacity-80" />
-        
+
+        <div className="image-overlay"></div>
+
+        {/* ================= BADGES ================= */}
         <div className="absolute left-4 top-4 z-10 flex flex-wrap gap-2">
-          {/* FIX 3: Added `whitespace-nowrap` to prevent text from wrapping and breaking the pill shape */}
-          <span className="whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm backdrop-blur-md">
+          <span className="badge">
             {product.category}
           </span>
-          {product.isFastDelivery ? (
-            <span className="whitespace-nowrap rounded-full border border-orange-400/50 bg-orange-500/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-[0_0_10px_rgba(249,115,22,0.5)] backdrop-blur-md">
-              ⚡ 15-min
+
+          {showFastDelivery && (
+            <span className="badge badge-fast">
+              ⚡ 15 min
             </span>
-          ) : null}
+          )}
         </div>
       </div>
 
       {/* ================= CONTENT ================= */}
       <div className="flex flex-1 flex-col p-6">
+
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            {/* FIX 4: Added `line-clamp-1` so long titles truncate cleanly instead of pushing content down */}
-            <h3 className="line-clamp-1 font-display text-xl font-bold tracking-tight text-white transition-colors group-hover:text-orange-400">
+            <h3 className="line-clamp-1 text-xl font-bold text-white transition-colors group-hover:text-orange-400">
               {product.name}
             </h3>
-            {/* FIX 5: Added `min-h-[2.75rem]` to force the description to always occupy exactly 2 lines of vertical space */}
-            <p className="mt-2 line-clamp-2 min-h-[2.75rem] text-sm font-medium leading-relaxed text-white/50">
+
+            <p className="mt-2 line-clamp-2 min-h-[2.75rem] text-sm text-white/60">
               {product.description}
             </p>
           </div>
-          {/* FIX 6: Added `shrink-0` to the price so it never gets squeezed by a long product name */}
-          <p className="shrink-0 text-2xl font-black text-white drop-shadow-md">
+
+          <p className="shrink-0 text-2xl font-black text-white">
             {formatCurrency(product.price)}
           </p>
         </div>
 
-        {/* FIX 7: This empty invisible div eats up all remaining vertical space, pushing the footer to the absolute bottom */}
         <div className="flex-1"></div>
 
-        {/* ================= METADATA PILLS ================= */}
-        <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold text-white/70">
-          <span className="flex whitespace-nowrap items-center gap-1.5 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 backdrop-blur-sm transition-colors hover:bg-white/10">
-            <MapPin className="h-3.5 w-3.5 text-orange-400" />
+        {/* ================= META ================= */}
+        <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
+
+          <span className="pill flex items-center gap-1.5">
+            <MapPin className="h-3.5 w-3.5 text-orange-500" />
             {product.locationTag}
           </span>
-          <span className="flex whitespace-nowrap items-center gap-1.5 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 backdrop-blur-sm transition-colors hover:bg-white/10">
-            <Clock3 className="h-3.5 w-3.5 text-teal-400" />
-            {product.deliveryMinutes} min
+
+          <span className="pill flex items-center gap-1.5">
+            <Clock3 className="h-3.5 w-3.5 text-teal-500" />
+            {
+              showFastDelivery
+                ? '⚡ 15 min'
+                : isSameCity
+                  ? 'Local Pick-up'
+                  : 'Scheduled'
+            }
           </span>
-          <span className="flex whitespace-nowrap items-center gap-1.5 rounded-full border border-white/5 bg-white/5 px-3 py-1.5 text-white/50 backdrop-blur-sm transition-colors hover:bg-white/10">
+
+          <span className="pill text-gray-700">
             By {product.vendorName}
           </span>
         </div>
 
-        {/* ================= FOOTER / ADD TO CART ================= */}
+        {/* ================= FOOTER ================= */}
         <div className="mt-5 flex items-center justify-between pt-2">
+
           <div className="flex items-center gap-2">
             <div className={`h-2 w-2 rounded-full ${product.stock > 5 ? 'bg-emerald-500' : 'bg-red-500 animate-pulse'}`} />
-            <p className="text-xs font-bold uppercase tracking-wider text-white/40">
+            <p className="text-xs font-bold text-white/50">
               {product.stock > 0 ? `${product.stock} Left` : 'Out of stock'}
             </p>
           </div>
-          
-          {/* DYNAMIC CART CONTROLS */}
+
+          {/* ================= CART ================= */}
           {cartQuantity > 0 ? (
-            /* Selected State: The [ - ] 1 [ + ] Pill */
-            <div className="flex h-[40px] items-center gap-2 rounded-[16px] bg-gradient-to-r from-orange-500 to-orange-400 p-1 shadow-[0_0_15px_rgba(249,115,22,0.25)]">
-              <button 
+            <div className="flex h-[40px] items-center gap-2 rounded-[16px] bg-orange-500 p-1">
+              <button
                 onClick={() => onDecrement(product.id)}
-                className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-black/20 text-white transition-colors hover:bg-black/40 font-bold"
+                className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-black/20 text-white"
               >
                 <Minus className="h-4 w-4" />
               </button>
-              
-              <span className="w-5 text-center text-sm font-black text-white">
+
+              <span className="w-5 text-center text-sm font-bold text-white">
                 {cartQuantity}
               </span>
-              
-              <button 
+
+              <button
                 onClick={() => onIncrement(product.id)}
                 disabled={product.stock <= cartQuantity}
-                className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-black/20 text-white transition-colors hover:bg-black/40 font-bold disabled:opacity-40 disabled:hover:bg-black/20"
+                className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-black/20 text-white disabled:opacity-40"
               >
                 <Plus className="h-4 w-4" />
               </button>
             </div>
           ) : onAddToCart ? (
-            /* Default State: The Add Button */
-            <Button 
-              onClick={() => onAddToCart(product.id)} 
+            <Button
+              onClick={() => onAddToCart(product.id)}
               disabled={product.stock === 0}
-              className="relative overflow-hidden rounded-[16px] bg-gradient-to-br from-orange-500 to-orange-600 px-6 py-2.5 font-bold text-white shadow-[0_4px_12px_rgba(249,115,22,0.3)] transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_20px_rgba(249,115,22,0.4)] active:scale-95 disabled:opacity-40 disabled:hover:scale-100" 
-              type="button" 
+              className="rounded-[16px] px-6 py-2.5 font-bold text-white bg-orange-500 hover:scale-105 active:scale-95 disabled:opacity-40"
+              type="button"
             >
               <Plus className="mr-1.5 h-4 w-4" />
               Add

@@ -94,9 +94,9 @@ export function AdminOverviewPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="font-semibold text-ink">{vendor.storeName}</p>
-                    <p className="mt-1 text-sm text-slate-500">
+                      <p className="mt-1 text-sm text-slate-500">
                         {vendor.fullName} | {vendor.storeAddress.city}
-                    </p>
+                      </p>
                     </div>
                     <Badge variant="warning">Pending</Badge>
                   </div>
