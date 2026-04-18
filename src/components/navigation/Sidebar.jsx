@@ -6,21 +6,18 @@ import './Sidebar.css';
 export function Sidebar({ role }) {
   return (
     <aside style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
-      className="relative flex h-full flex-col rounded-[40px] border p-4 shadow-2xl overflow-hidden sidebar-glass">
+      className="sticky top-4 flex h-[calc(100vh-2rem)] flex-col rounded-[40px] border p-4 shadow-2xl overflow-hidden sidebar-glass">
 
       {/* Header */}
       <div className="mb-6 rounded-[30px] px-6 py-6 border transition-all duration-300 hover:shadow-lg"
         style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
-        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">
-          Workspace
-        </p>
-        <p className="font-display text-lg font-black tracking-tight text-slate-800">
+        <p className="font-display text-[35px] font-black tracking-tight text-slate-800">
           Doko<span className="text-orange-500">Xpress</span>
         </p>
       </div>
 
       {/* Nav */}
-      <nav className="space-y-1.5">
+      <nav className="space-y-1.5 overflow-y-auto pr-2 pb-2">
         {DASHBOARD_NAV[role].map((item) => {
           const Icon = item.icon;
           return (

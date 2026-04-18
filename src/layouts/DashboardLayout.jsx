@@ -20,7 +20,7 @@ export function DashboardLayout() {
 
   // VERIFICATION GATE: If vendor is pending, show them the pending notice instead of standard dashboard
   const isPendingVendor = role === 'vendor' && user.verificationStatus === 'pending';
-  
+
   const displayName = user?.fullName || user?.name || 'User';
 
   return (
@@ -32,7 +32,7 @@ export function DashboardLayout() {
           'fixed inset-y-4 left-4 z-50 w-[300px] transition-transform duration-500 ease-out lg:static lg:inset-auto lg:w-auto',
           sidebarOpen ? 'translate-x-0' : '-translate-x-[120%] lg:translate-x-0'
         )}>
-          <Sidebar role={isPendingVendor ? 'user' : role} /> 
+          <Sidebar role={isPendingVendor ? 'user' : role} />
         </div>
 
         {/* Mobile overlay */}
@@ -66,7 +66,7 @@ export function DashboardLayout() {
                 className="font-display text-xl font-bold tracking-tight text-orange-500 hover:text-orange-600 transition-colors"
                 to="/"
               >
-                DokoXpress
+                <span className="text-black">Doko</span>Xpress
               </Link>
 
               <span className="hidden sm:inline-block rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-orange-500">

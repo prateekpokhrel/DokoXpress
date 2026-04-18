@@ -95,7 +95,7 @@ export function UserProductsPage() {
   );
 
   const cartTotal = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
-  const cartCount  = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   async function syncCart(task, successMessage) {
     setCartLoading(true);
@@ -179,14 +179,17 @@ export function UserProductsPage() {
           <p className="text-sm font-medium text-slate-500">Active cart total</p>
           <p className="mt-3 font-display text-4xl font-semibold text-slate-900">{formatCurrency(cartTotal)}</p>
           <div className="mt-5 grid gap-3">
-            <div className="rounded-2xl bg-slate-50 border px-4 py-3">
+
+            {/* Not required now */}
+            {/* <div className="rounded-2xl bg-slate-50 border px-4 py-3">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">15-min badge</p>
               <p className="mt-1 text-sm text-slate-600">Shown only on items flagged for express delivery.</p>
-            </div>
-            <div className="rounded-2xl bg-slate-50 border px-4 py-3">
+            </div> */}
+            {/* <div className="rounded-2xl bg-slate-50 border px-4 py-3">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Location logic</p>
               <p className="mt-1 text-sm text-slate-600">Products matching {user.address?.city} float to the top.</p>
-            </div>
+            </div> */}
+
           </div>
         </Card>
       </div>
@@ -239,7 +242,7 @@ export function UserProductsPage() {
               >
                 <ChevronLeft className="h-5 w-5 text-slate-600" />
               </button>
-              
+
               <div className="flex items-center gap-2">
                 <span className="text-sm font-black text-slate-800">Page {currentPage}</span>
                 <span className="text-sm font-medium text-slate-400">of {totalPages}</span>
