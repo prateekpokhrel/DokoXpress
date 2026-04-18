@@ -32,9 +32,11 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, Object> payload) {
-        String email = String.valueOf(payload.get("email"));
-        String password = String.valueOf(payload.get("password"));
-        String requestedRole = String.valueOf(payload.get("role"));
+        String email = String.valueOf(payload.get("email")).trim();
+        String password = String.valueOf(payload.get("password")).trim();
+        String requestedRole = String.valueOf(payload.get("role")).trim();
+        
+        System.out.println("Login request received for: " + email + " with role: " + requestedRole);
 
         if ("admin".equalsIgnoreCase(requestedRole)) {
             User user = userRepository.findByEmail(email).orElse(null);
@@ -42,24 +44,26 @@ public class AuthController {
                 String jwt = jwtUtil.generateToken(userDetailsService.loadUserByUsername(user.getEmail()), "admin");
                 return ResponseEntity.ok(buildMockedResponse(user, jwt));
             }
-            return ResponseEntity.status(401).body("Invalid admin credentials");
+            System.err.println("Admin login failed for: " + email);
+            return ResponseEntity.status(401).body(Map.of("message", "Invalid admin credentials"));
         }
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            System.err.println("Auth failure for " + email + ": " + e.getMessage());
+            return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials: " + e.getMessage()));
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         User user = userRepository.findByEmail(email).orElseThrow();
 
         if (!user.getRole().equalsIgnoreCase(requestedRole)) {
-            return ResponseEntity.status(401).body("Invalid role for this user");
+            System.err.println("Role mismatch for " + email + ". Target: " + requestedRole + ", Actual: " + user.getRole());
+            return ResponseEntity.status(401).body(Map.of("message", "Invalid role for this user"));
         }
 
         String jwt = jwtUtil.generateToken(userDetails, user.getRole());
-
         return ResponseEntity.ok(buildMockedResponse(user, jwt));
     }
 
