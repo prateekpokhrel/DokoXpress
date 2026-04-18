@@ -23,12 +23,14 @@ export const ROLE_LABELS = {
   user: 'Customer',
   vendor: 'Vendor',
   admin: 'Admin',
+  rider: 'Delivery Partner',
 };
 
 export const DASHBOARD_HOME = {
   user: '/user/products',
   vendor: '/vendor/products',
   admin: '/admin/overview',
+  rider: '/rider/dashboard',
 };
 
 export const LOCATION_OPTIONS = ['Bhubaneswar', 'Cuttack', 'Puri', 'Rourkela'];

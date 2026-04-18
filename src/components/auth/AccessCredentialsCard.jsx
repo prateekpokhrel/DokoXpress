@@ -11,44 +11,70 @@ export function AccessCredentialsCard() {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-orange-500">
-            Quick Access
+            Why DokoXpress
           </p>
-          <h3 className="mt-1 font-display text-xl font-bold" style={{ color: 'var(--text-main)' }}>
-            Platform credentials
+          <h3
+            className="mt-1 font-display text-xl font-bold"
+            style={{ color: 'var(--text-main)' }}
+          >
+            Lightning-fast commerce experience
           </h3>
         </div>
+
+        {/* Optional badge (kept structure intact) */}
         <div className="flex gap-2 text-xs">
-          <div
-            className="rounded-full border px-3 py-1 font-semibold"
-            style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
-          >
-            User/Vendor: <span className="font-mono font-bold text-teal-600">{DEFAULT_PASSWORD_HINT}</span>
-          </div>
-          <div
-            className="rounded-full border px-3 py-1 font-semibold"
-            style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
-          >
-            Admin: <span className="font-mono font-bold text-purple-600">Inspiron@15</span>
-          </div>
+          <Badge variant="secondary">Next-Gen Delivery</Badge>
         </div>
       </div>
 
       <div className="mt-5 grid gap-3 text-sm">
         {[
-          { role: 'Customer', email: 'ava.customer@dokoxpress.com', color: '#f97316' },
-          { role: 'Vendor',   email: 'milan.vendor@dokoxpress.com', color: '#0d9488' },
-          { role: 'Admin',    email: 'admin.dokoxpress@gmail.com',  color: '#7c3aed' },
-        ].map(({ role, email, color }) => (
+          {
+            title: '15-Minute Delivery',
+            desc: 'Ultra-fast delivery for daily essentials in selected areas.',
+            color: '#f97316',
+          },
+          {
+            title: 'Multi-Vendor Marketplace',
+            desc: 'Shop from multiple local vendors in one seamless platform.',
+            color: '#0d9488',
+          },
+          {
+            title: 'Real-Time Order Tracking',
+            desc: 'Track your orders live from store to doorstep.',
+            color: '#2563eb',
+          },
+          {
+            title: 'Smart Inventory System',
+            desc: 'Vendors manage stock, pricing, and availability easily.',
+            color: '#7c3aed',
+          },
+          {
+            title: 'Secure Payments',
+            desc: 'Fast and safe checkout with multiple payment options.',
+            color: '#16a34a',
+          },
+        ].map(({ title, desc, color }) => (
           <div
-            key={role}
-            className="rounded-[14px] border p-4 transition-all hover:shadow-sm"
-            style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
+            key={title}
+            className="rounded-[14px] border p-4 transition-all hover:shadow-md hover:-translate-y-[2px]"
+            style={{
+              backgroundColor: 'var(--bg-subtle)',
+              borderColor: 'var(--border)',
+            }}
           >
-            <p className="text-[10px] font-black uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
-              {role}
+            <p
+              className="text-[11px] font-black uppercase tracking-wider mb-1"
+              style={{ color }}
+            >
+              {title}
             </p>
-            <p className="font-mono text-sm font-semibold" style={{ color }}>
-              {email}
+
+            <p
+              className="text-sm font-medium"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              {desc}
             </p>
           </div>
         ))}

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { login, signInWithGoogle, signupCustomer, signupVendor } from '@/services/api/authService';
+import { login, signInWithGoogle, signupCustomer, signupRider, signupVendor } from '@/services/api/authService';
 import { findAccountById, readMockDatabase, stripPassword } from '@/services/mocks/database';
 import { clearStoredSession, persistSession, readStoredSession } from '@/utils/token';
 import { useMarketplace } from './MarketplaceContext';
@@ -88,6 +88,9 @@ export function AuthProvider({ children }) {
         },
         signupAsVendor: async (payload) => {
           await handleAuth(signupVendor(payload));
+        },
+        signupAsRider: async (payload) => {
+          await handleAuth(signupRider(payload));
         },
         loginWithGoogle: async (role, remember) => {
           await handleAuth(signInWithGoogle(role, remember));

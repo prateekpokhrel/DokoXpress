@@ -1,2 +1,123 @@
 /* Styles for AppRouter.jsx */
 
+/* ---------- PAGE WRAPPER ---------- */
+
+/* Apply this class to layouts if needed */
+.route-page {
+    width: 100%;
+    min-height: 100vh;
+    animation: routeFade 0.25s ease-in-out;
+}
+
+/* ---------- PAGE TRANSITION ---------- */
+
+@keyframes routeFade {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- DASHBOARD SMOOTH LOAD ---------- */
+
+.dashboard-page {
+    animation: dashboardEnter 0.3s ease;
+}
+
+@keyframes dashboardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.995);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ---------- PUBLIC PAGES (HOME / LOGIN / SIGNUP) ---------- */
+
+.public-page {
+    animation: publicFade 0.3s ease;
+}
+
+@keyframes publicFade {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ---------- ROUTE LOADING (OPTIONAL SKELETON) ---------- */
+
+.route-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.route-loader {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid rgba(100, 116, 139, 0.2);
+    border-top-color: #f97316;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Spinner animation reuse */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- NOT FOUND PAGE ---------- */
+
+.notfound-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    animation: routeFade 0.3s ease;
+}
+
+.notfound-title {
+    font-size: 72px;
+    font-weight: 900;
+    color: #f97316;
+}
+
+.notfound-text {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #64748b;
+}
+
+/* ---------- SCROLL RESET FIX ---------- */
+
+.route-scroll-reset {
+    scroll-behavior: smooth;
+}
+
+/* ---------- MOBILE OPTIMIZATION ---------- */
+
+@media (max-width: 640px) {
+    .route-page {
+        padding: 12px;
+    }
+}

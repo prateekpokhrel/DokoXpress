@@ -22,6 +22,19 @@ public class Order {
     private double totalPrice;
 
     private String status = "Placed";
+    
+    private String paymentMethod; // COD, CARD, UPI, NET_BANKING
+    private String paymentStatus = "Pending";
+    private String trackingStatus = "Preparing";
+    
+    @Column(name = "rider_id")
+    private Long riderId;
+
+    @Transient
+    private String riderName;
+
+    @Transient
+    private String riderPhone;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -111,5 +124,53 @@ public class Order {
 
     public void setVendorName(String vendorName) {
         this.vendorName = vendorName;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getTrackingStatus() {
+        return trackingStatus;
+    }
+
+    public void setTrackingStatus(String trackingStatus) {
+        this.trackingStatus = trackingStatus;
+    }
+
+    public Long getRiderId() {
+        return riderId;
+    }
+
+    public void setRiderId(Long riderId) {
+        this.riderId = riderId;
+    }
+
+    public String getRiderName() {
+        return riderName;
+    }
+
+    public void setRiderName(String riderName) {
+        this.riderName = riderName;
+    }
+
+    public String getRiderPhone() {
+        return riderPhone;
+    }
+
+    public void setRiderPhone(String riderPhone) {
+        this.riderPhone = riderPhone;
     }
 }

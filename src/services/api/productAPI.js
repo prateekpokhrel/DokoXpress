@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// ✅ Base URL (easy to change later)
+//  Base URL (easy to change later)
 const API = axios.create({
     baseURL: "http://localhost:8081/api",
     headers: {
@@ -8,7 +8,7 @@ const API = axios.create({
     },
 });
 
-// ✅ OPTIONAL: attach JWT token (if using login)
+//  OPTIONAL: attach JWT token (if using login)
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {

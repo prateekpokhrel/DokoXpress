@@ -16,6 +16,9 @@ import { UserProfilePage } from '@/pages/user/UserProfilePage';
 import { VendorOrdersPage } from '@/pages/vendor/VendorOrdersPage';
 import { VendorProductsPage } from '@/pages/vendor/VendorProductsPage';
 import { VendorProfilePage } from '@/pages/vendor/VendorProfilePage';
+import { RiderDashboardPage } from '@/pages/rider/RiderDashboardPage';
+import { RiderOrdersPage } from '@/pages/rider/RiderOrdersPage';
+import { RiderProfilePage } from '@/pages/rider/RiderProfilePage';
 import './AppRouter.css';
 
 export function AppRouter() {
@@ -40,6 +43,14 @@ export function AppRouter() {
           <Route element={<VendorProductsPage />} path="/vendor/products" />
           <Route element={<VendorOrdersPage />} path="/vendor/orders" />
           <Route element={<VendorProfilePage />} path="/vendor/profile" />
+        </Route>
+      </Route>
+
+      <Route element={<ProtectedRoute allowedRoles={['rider']} />}>
+        <Route element={<DashboardLayout />}>
+          <Route element={<RiderDashboardPage />} path="/rider/dashboard" />
+          <Route element={<RiderOrdersPage />} path="/rider/orders" />
+          <Route element={<RiderProfilePage />} path="/rider/profile" />
         </Route>
       </Route>
 

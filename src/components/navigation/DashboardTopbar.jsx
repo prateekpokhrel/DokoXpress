@@ -34,7 +34,7 @@ export function DashboardTopbar({ title, subtitle, action, onCartClick, cartCoun
           style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)', color: 'var(--text-main)' }}
         >
           <MapPin className="h-4 w-4 text-orange-500" />
-          {user && 'address' in user ? user.address.city : user && 'storeAddress' in user ? user.storeAddress.city : 'City view'}
+          {user?.city || user?.address?.city || user?.storeAddress?.city || 'City view'}
         </div>
         
         {/* Shopping Cart (Conditional) */}

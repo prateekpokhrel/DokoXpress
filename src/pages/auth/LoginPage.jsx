@@ -17,6 +17,7 @@ const MASTER_ADMIN_EMAIL = import.meta.env?.VITE_ADMIN_EMAIL || 'admin.dokoxpres
 const ROLE_STYLES = {
   user:   { active: 'bg-orange-500 text-white border-orange-500 shadow-sm', inactive: 'text-slate-600 border-slate-200 hover:bg-orange-50 hover:border-orange-200' },
   vendor: { active: 'bg-teal-500 text-white border-teal-500 shadow-sm',    inactive: 'text-slate-600 border-slate-200 hover:bg-teal-50 hover:border-teal-200' },
+  rider:  { active: 'bg-indigo-600 text-white border-indigo-600 shadow-sm', inactive: 'text-slate-600 border-slate-200 hover:bg-indigo-50 hover:border-indigo-200' },
   admin:  { active: 'bg-violet-600 text-white border-violet-600 shadow-sm', inactive: 'text-slate-600 border-slate-200 hover:bg-violet-50 hover:border-violet-200' },
 };
 
@@ -61,10 +62,10 @@ export function LoginPage() {
 
         {/* ROLE SELECTOR */}
         <div
-          className="grid grid-cols-3 gap-2 rounded-[18px] p-1.5 border"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2 rounded-[18px] p-1.5 border"
           style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
         >
-          {['user', 'vendor', 'admin'].map((candidate) => (
+          {['user', 'vendor', 'rider', 'admin'].map((candidate) => (
             <label
               key={candidate}
               className={`cursor-pointer rounded-[12px] px-3 py-3 text-center text-sm font-bold tracking-wide transition-all duration-200 border ${

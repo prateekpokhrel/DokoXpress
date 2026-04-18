@@ -10,15 +10,15 @@ import { FormField } from '@/components/common/FormField';
 import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { customerSignupSchema, vendorSignupSchema } from '@/schemas/authSchemas';
+import { customerSignupSchema, riderSignupSchema, vendorSignupSchema } from '@/schemas/authSchemas';
 import { fileToDataUrl } from '@/utils/files';
 import { DASHBOARD_HOME, ROLE_LABELS } from '@/utils/constants';
 import './SignupPage.css';
 
-const ROLES = ['user', 'vendor'];
+const ROLES = ['user', 'vendor', 'rider'];
 
 export function SignupPage() {
-  const { role, session, signupAsCustomer, signupAsVendor, loginWithGoogle, isAuthBusy } = useAuth();
+  const { role, session, signupAsCustomer, signupAsVendor, signupAsRider, loginWithGoogle, isAuthBusy } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const [signupRole, setSignupRole] = useState('user');
@@ -39,9 +39,18 @@ export function SignupPage() {
     },
   });
 
+  const riderForm = useForm({
+    resolver: zodResolver(riderSignupSchema),
+    defaultValues: {
+      fullName: '', email: '', phone: '', password: '',
+      age: '', vehicleNumber: '', country: '', district: '', city: '', remember: true,
+    },
+  });
+
   useEffect(() => {
     customerForm.reset();
     vendorForm.reset();
+    riderForm.reset();
   }, [signupRole]);
 
   if (role && session) {
@@ -56,15 +65,31 @@ export function SignupPage() {
             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-500 mb-4">
               Onboarding
             </p>
-            <div className="space-y-4 text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
-              <div className="flex gap-3">
-                <div className="h-5 w-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 text-[10px] font-bold">1</div>
-                <p>Customers get immediate marketplace access.</p>
-              </div>
-              <div className="flex gap-3">
-                <div className="h-5 w-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 text-[10px] font-bold">2</div>
-                <p>Vendors need document verification before listing.</p>
-              </div>
+
+            <div className="space-y-3 text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
+              {[
+                { text: 'Customers get instant marketplace access.', color: 'emerald' },
+                { text: 'Vendors require verification before selling.', color: 'orange' },
+                { text: 'Riders deliver orders and earn per trip.', color: 'blue' },
+                { text: 'Admins manage users, vendors, and platform.', color: 'purple' },
+                { text: 'Fast delivery enabled for selected products.', color: 'rose' },
+              ].map((item, index) => (
+                <div key={index} className="flex gap-3">
+                  <div
+                    className={`h-5 w-5 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold
+                      ${item.color === 'emerald' ? 'bg-emerald-500/20 text-emerald-400' : ''}
+                      ${item.color === 'orange' ? 'bg-orange-500/20 text-orange-400' : ''}
+                      ${item.color === 'blue' ? 'bg-blue-500/20 text-blue-400' : ''}
+                      ${item.color === 'purple' ? 'bg-purple-500/20 text-purple-400' : ''}
+                      ${item.color === 'rose' ? 'bg-rose-500/20 text-rose-400' : ''}
+                    `}
+                  >
+                    {index + 1}
+                  </div>
+
+                  <p>{item.text}</p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -82,16 +107,15 @@ export function SignupPage() {
       title="Create your account"
     >
       <div className="space-y-8">
-        {/* Role tabs — only Customer & Vendor */}
-        <div className="grid grid-cols-2 gap-2 rounded-[16px] border p-1.5" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
+        {/* Role tabs — Customer, Vendor & Rider */}
+        <div className="grid grid-cols-3 gap-2 rounded-[16px] border p-1.5" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
           {ROLES.map((candidate) => (
             <button
               key={candidate}
-              className={`rounded-[12px] py-2.5 text-xs font-black uppercase tracking-widest transition-all duration-300 ${
-                signupRole === candidate
+              className={`rounded-[12px] py-2.5 text-xs font-black uppercase tracking-widest transition-all duration-300 ${signupRole === candidate
                   ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)]'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
-              }`}
+                }`}
               onClick={() => setSignupRole(candidate)}
               type="button"
             >
@@ -152,7 +176,7 @@ export function SignupPage() {
                 <GoogleLoginButton label="Continue with Google" loading={isAuthBusy} onClick={() => loginWithGoogle('user', true)} />
               </div>
             </form>
-          ) : (
+          ) : signupRole === 'vendor' ? (
             <form
               className="grid gap-5 md:grid-cols-2 animate-in"
               onSubmit={vendorForm.handleSubmit(async (values) => {
@@ -204,6 +228,66 @@ export function SignupPage() {
               </label>
               <div className="md:col-span-2 pt-2">
                 <Button fullWidth loading={isAuthBusy} type="submit" variant="secondary">Submit Vendor Application</Button>
+              </div>
+            </form>
+          ) : (
+            <form
+              className="grid gap-5 md:grid-cols-2 animate-in"
+              onSubmit={riderForm.handleSubmit(async (values) => {
+                try {
+                  const cPhoto = values.citizenshipPhoto?.[0] ? await fileToDataUrl(values.citizenshipPhoto[0]) : '';
+                  const lPhoto = values.drivingLicensePhoto?.[0] ? await fileToDataUrl(values.drivingLicensePhoto[0]) : '';
+
+                  await signupAsRider({
+                    ...values,
+                    citizenshipPhoto: cPhoto,
+                    drivingLicensePhoto: lPhoto,
+                  });
+                  showToast({ title: 'Welcome Rider!', description: 'Your dashboard is ready.', variant: 'success' });
+                  navigate('/rider/dashboard');
+                } catch (error) {
+                  showToast({ title: 'Error', description: error.message, variant: 'error' });
+                }
+              })}
+            >
+              <div className="md:col-span-2">
+                <FormField error={riderForm.formState.errors.fullName?.message} label="Full Name" {...riderForm.register('fullName')} />
+              </div>
+              <FormField error={riderForm.formState.errors.email?.message} label="Email" type="email" {...riderForm.register('email')} />
+              <FormField error={riderForm.formState.errors.phone?.message} label="Phone Number" {...riderForm.register('phone')} />
+              <FormField error={riderForm.formState.errors.age?.message} label="Age" type="number" {...riderForm.register('age')} />
+              <FormField error={riderForm.formState.errors.vehicleNumber?.message} label="Vehicle Number" {...riderForm.register('vehicleNumber')} />
+
+              <FormField error={riderForm.formState.errors.country?.message} label="Country" {...riderForm.register('country')} />
+              <FormField error={riderForm.formState.errors.district?.message} label="District" {...riderForm.register('district')} />
+              <div className="md:col-span-2">
+                <FormField error={riderForm.formState.errors.city?.message} label="City" {...riderForm.register('city')} />
+              </div>
+
+              <div className="md:col-span-2">
+                <FormField error={riderForm.formState.errors.password?.message} label="Password" type="password" {...riderForm.register('password')} />
+              </div>
+
+              <FileUploadField
+                error={riderForm.formState.errors.citizenshipPhoto?.message}
+                fileName={riderForm.watch('citizenshipPhoto')?.[0]?.name}
+                label="Citizenship Photo"
+                {...riderForm.register('citizenshipPhoto')}
+              />
+              <FileUploadField
+                error={riderForm.formState.errors.drivingLicensePhoto?.message}
+                fileName={riderForm.watch('drivingLicensePhoto')?.[0]?.name}
+                label="Driving License Photo"
+                {...riderForm.register('drivingLicensePhoto')}
+              />
+
+              <label className="checkbox-wrapper md:col-span-2">
+                <input type="checkbox" {...riderForm.register('remember')} />
+                <span>Keep me signed in</span>
+              </label>
+
+              <div className="md:col-span-2 pt-2">
+                <Button fullWidth loading={isAuthBusy} type="submit" variant="secondary">Register as Rider</Button>
               </div>
             </form>
           )}

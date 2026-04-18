@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Clock3, MapPin, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock3, MapPin, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/common/Badge';
 import { Card } from '@/components/common/Card';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Skeleton } from '@/components/common/Skeleton';
 import { DashboardTopbar } from '@/components/navigation/DashboardTopbar';
 import { CartSheet } from '@/components/product/CartSheet';
+import { PaymentModal } from '@/components/product/PaymentModal';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductFilters } from '@/components/product/ProductFilters';
 import { useAuth } from '@/hooks/useAuth';
@@ -35,10 +36,14 @@ export function UserProductsPage() {
   const { showToast } = useToast();
 
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
+  const [currentPage, setCurrentPage] = useState(1);
   const [cartOpen, setCartOpen] = useState(false);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [cartLoading, setCartLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const ITEMS_PER_PAGE = 6;
 
   const refreshCart = useCallback(async () => {
     if (!user?.id) return;
@@ -55,6 +60,11 @@ export function UserProductsPage() {
     if (!user || user.role !== 'user') return;
     void refreshCart();
   }, [refreshCart, user]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
 
   if (!user || user.role !== 'user') return null;
 
@@ -77,6 +87,12 @@ export function UserProductsPage() {
       const bScore = b.locationTag === user.address?.city ? 1 : 0;
       return bScore - aScore;
     });
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const cartTotal = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
   const cartCount  = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -102,14 +118,14 @@ export function UserProductsPage() {
     }
   }
 
-  async function handleCheckout() {
+  async function handleConfirmPayment(paymentMethod) {
     setCheckoutLoading(true);
     try {
-      await checkout(user.id);
+      await checkout(user.id, paymentMethod);
       const refreshed = await getUserCart(user.id);
       setCartItems(refreshed);
       showToast({ title: 'Order placed', description: 'Routed to the right vendors.', variant: 'success' });
-      setCartOpen(false);
+      setPaymentModalOpen(false);
     } catch (error) {
       showToast({
         title: 'Checkout failed',
@@ -122,7 +138,7 @@ export function UserProductsPage() {
   }
 
   return (
-    <div className="space-y-5 fade-in">
+    <div className="space-y-5">
       <DashboardTopbar
         cartCount={cartCount}
         onCartClick={() => setCartOpen(true)}
@@ -131,7 +147,7 @@ export function UserProductsPage() {
 
       {/* Promotional Discount Ad Banner */}
       <div
-        className="relative overflow-hidden rounded-[24px] border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 sm:flex sm:items-center sm:justify-between shadow-sm"
+        className="relative overflow-hidden rounded-[24px] border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 sm:flex sm:items-center sm:justify-between shadow-sm fade-in"
       >
         <div className="relative z-10">
           <p className="text-xs font-black uppercase tracking-widest text-indigo-500">Flash Deal</p>
@@ -143,7 +159,7 @@ export function UserProductsPage() {
         </button>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr]">
+      <div className="grid gap-4 xl:grid-cols-[1.3fr_0.7fr] fade-in">
         <Card className="card-hover-effect">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-orange-500">Express shopping</p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-slate-800">Curated items for your city</h2>
@@ -186,31 +202,58 @@ export function UserProductsPage() {
             <Skeleton key={index} className="h-[420px] rounded-[28px] product-grid-item" style={{ animationDelay: `${index * 50}ms` }} />
           ))}
         </div>
-      ) : filteredProducts.length ? (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredProducts.map((product, index) => {
-            const cartItem = cartItems.find((item) => String(item.productId) === String(product.id));
-            const currentQty = cartItem?.quantity ?? 0;
+      ) : paginatedProducts.length ? (
+        <div className="space-y-8">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            {paginatedProducts.map((product, index) => {
+              const cartItem = cartItems.find((item) => String(item.productId) === String(product.id));
+              const currentQty = cartItem?.quantity ?? 0;
 
-            return (
-              <div key={product.id} className="relative product-grid-item" style={{ animationDelay: `${index * 50}ms` }}>
-                {product.locationTag === user.address?.city && (
-                  /* MOVED BADGE: Absolute right-5 instead of left-5 prevents overlap. Added light theme styles. */
-                  <Badge className="absolute right-5 top-5 z-20 bg-orange-50 text-orange-600 border px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
-                    <MapPin className="mr-1 h-3.5 w-3.5" />
-                    Local pick-up
-                  </Badge>
-                )}
-                <ProductCard
-                  product={product}
-                  cartQuantity={currentQty}
-                  onAddToCart={(productId) => void syncCart(addItemToCart(user.id, productId), 'Added to cart')}
-                  onIncrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty + 1))}
-                  onDecrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty - 1))}
-                />
+              return (
+                <div key={product.id} className="relative product-grid-item" style={{ animationDelay: `${index * 50}ms` }}>
+                  {product.locationTag === user.address?.city && (
+                    <Badge className="absolute right-5 top-5 z-20 bg-orange-50 text-orange-600 border px-3 py-1 text-[10px] shadow-sm backdrop-blur-md" variant="warning">
+                      <MapPin className="mr-1 h-3.5 w-3.5" />
+                      Local pick-up
+                    </Badge>
+                  )}
+                  <ProductCard
+                    product={product}
+                    cartQuantity={currentQty}
+                    onAddToCart={(productId) => void syncCart(addItemToCart(user.id, productId), 'Added to cart')}
+                    onIncrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty + 1))}
+                    onDecrement={(productId) => void syncCart(changeCartQuantity(user.id, productId, currentQty - 1))}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 py-6 border-t border-slate-100">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border shadow-sm transition-all hover:bg-slate-50 disabled:opacity-30"
+              >
+                <ChevronLeft className="h-5 w-5 text-slate-600" />
+              </button>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-black text-slate-800">Page {currentPage}</span>
+                <span className="text-sm font-medium text-slate-400">of {totalPages}</span>
               </div>
-            );
-          })}
+
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border shadow-sm transition-all hover:bg-slate-50 disabled:opacity-30"
+              >
+                <ChevronRight className="h-5 w-5 text-slate-600" />
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <EmptyState
@@ -222,13 +265,24 @@ export function UserProductsPage() {
 
       <CartSheet
         items={cartItems}
-        loading={checkoutLoading || cartLoading}
-        onCheckout={handleCheckout}
+        loading={cartLoading}
+        onCheckout={() => {
+          setCartOpen(false);
+          setPaymentModalOpen(true);
+        }}
         onClose={() => setCartOpen(false)}
         onDecrement={(productId, quantity) => void syncCart(changeCartQuantity(user.id, productId, quantity - 1))}
         onIncrement={(productId, quantity) => void syncCart(changeCartQuantity(user.id, productId, quantity + 1))}
         onRemove={(productId) => void syncCart(deleteCartItem(user.id, productId), 'Item removed')}
         open={cartOpen}
+      />
+
+      <PaymentModal
+        loading={checkoutLoading}
+        onClose={() => setPaymentModalOpen(false)}
+        onConfirm={handleConfirmPayment}
+        open={paymentModalOpen}
+        total={cartTotal}
       />
     </div>
   );

@@ -6,16 +6,16 @@ import './Sidebar.css';
 export function Sidebar({ role }) {
   return (
     <aside style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
-      className="relative flex h-full flex-col rounded-[24px] border p-5 shadow-sm overflow-hidden">
+      className="relative flex h-full flex-col rounded-[40px] border p-4 shadow-2xl overflow-hidden sidebar-glass">
 
       {/* Header */}
-      <div className="mb-8 rounded-[18px] px-5 py-5 border"
+      <div className="mb-6 rounded-[30px] px-6 py-6 border transition-all duration-300 hover:shadow-lg"
         style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
-        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-500">
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">
           Workspace
         </p>
-        <p className="mt-1 font-display text-xl font-bold tracking-tight text-orange-500">
-          DokoXpress
+        <p className="font-display text-lg font-black tracking-tight text-slate-800">
+          Doko<span className="text-orange-500">Xpress</span>
         </p>
       </div>
 
@@ -29,21 +29,16 @@ export function Sidebar({ role }) {
               to={item.href}
               className={({ isActive }) =>
                 cn(
-                  'group flex items-center gap-3 rounded-[14px] px-4 py-3 text-sm font-semibold tracking-wide transition-all duration-200',
+                  'group flex items-center gap-3 rounded-[20px] px-5 py-3.5 text-xs font-black uppercase tracking-widest transition-all duration-300 border-2',
                   isActive
-                    ? 'bg-orange-50 text-orange-500 border border-orange-200 shadow-sm'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800 border border-transparent'
+                    ? 'bg-orange-500 text-white border-orange-500 shadow-[0_10px_20px_rgba(249,115,22,0.2)]'
+                    : 'text-ink opacity-40 border-transparent hover:bg-white hover:opacity-100 hover:shadow-sm'
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <div className={cn(
-                    'rounded-lg p-1.5 transition-colors',
-                    isActive ? 'bg-orange-100 text-orange-500' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200 group-hover:text-slate-700'
-                  )}>
-                    <Icon className="h-[16px] w-[16px]" />
-                  </div>
+                  <Icon className={cn("h-4 w-4", isActive ? "text-white" : "text-slate-300 group-hover:text-orange-500")} />
                   {item.label}
                 </>
               )}
@@ -53,12 +48,12 @@ export function Sidebar({ role }) {
       </nav>
 
       {/* Bottom */}
-      <div className="mt-auto rounded-[18px] p-4 border" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
-        <div className="flex items-center gap-2 mb-1">
-          <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-600">DokoXpress</p>
+      <div className="mt-auto rounded-[30px] p-6 border bg-gradient-to-br from-slate-50 to-transparent" style={{ borderColor: 'var(--border)' }}>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)] animate-pulse" />
+          <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">Doko Xpress</p>
         </div>
-        <p className="text-xs leading-relaxed text-slate-400">
+        <p className="text-[11px] font-medium leading-relaxed text-slate-400">
           नेपालको बजार, अब तपाईंको मोबाइलमा.
         </p>
       </div>

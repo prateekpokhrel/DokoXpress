@@ -53,8 +53,8 @@ export async function removeFromCart(userId, productId) {
     return response.data;
 }
 
-export async function placeOrders(userId) {
-    const response = await apiClient.post(`/orders/checkout/${userId}`);
+export async function placeOrders(userId, paymentMethod) {
+    const response = await apiClient.post(`/orders/checkout/${userId}?paymentMethod=${paymentMethod}`);
     return {
       cart: [],
       orders: response.data

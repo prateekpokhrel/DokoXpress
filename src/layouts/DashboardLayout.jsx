@@ -25,11 +25,11 @@ export function DashboardLayout() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-page)' }}>
-      <div className="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:px-6">
+      <div className="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6">
 
         {/* SIDEBAR */}
         <div className={cn(
-          'fixed inset-y-4 left-4 z-50 w-[260px] transition-transform duration-500 ease-out lg:static lg:inset-auto lg:w-auto',
+          'fixed inset-y-4 left-4 z-50 w-[300px] transition-transform duration-500 ease-out lg:static lg:inset-auto lg:w-auto',
           sidebarOpen ? 'translate-x-0' : '-translate-x-[120%] lg:translate-x-0'
         )}>
           <Sidebar role={isPendingVendor ? 'user' : role} /> 

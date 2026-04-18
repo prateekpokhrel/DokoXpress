@@ -27,10 +27,13 @@ public class OrderController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private RiderRepository riderRepository;
 
     @PostMapping("/checkout/{userId}")
     @Transactional
-    public ResponseEntity<?> checkout(@PathVariable Long userId) {
+    public ResponseEntity<?> checkout(@PathVariable Long userId, @RequestParam String paymentMethod) {
         System.out.println("Checkout started for userId: " + userId);
         List<Cart> cartItems = cartRepository.findByUserId(userId);
         if (cartItems.isEmpty()) {
@@ -66,6 +69,21 @@ public class OrderController {
             order.setVendorId(vendorId);
             order.setStatus("Placed");
             order.setTotalPrice(0.0);
+            order.setPaymentMethod(paymentMethod);
+            order.setPaymentStatus(paymentMethod.equalsIgnoreCase("COD") ? "Pending" : "Paid");
+            order.setTrackingStatus("Order Placed");
+
+            // Attempt to assign rider automatically
+            String vendorCity = vendor != null ? vendor.getCity() : null;
+            if (vendorCity != null) {
+                List<Rider> availableRiders = riderRepository.findByCityAndAvailableTrue(vendorCity);
+                if (!availableRiders.isEmpty()) {
+                    Rider assignedRider = availableRiders.get(new Random().nextInt(availableRiders.size()));
+                    order.setRiderId(assignedRider.getId());
+                    order.setTrackingStatus("Rider Assigned");
+                    System.out.println("Assigned Rider " + assignedRider.getId() + " to Order");
+                }
+            }
             
             // Initial save to generate ID
             order = orderRepository.save(order);
@@ -164,5 +182,37 @@ public class OrderController {
             item.setProduct(productRepository.findById(item.getProductId()).orElse(null));
         }
         order.setItems(items);
+        
+        if (order.getRiderId() != null) {
+            riderRepository.findById(order.getRiderId()).ifPresent(r -> {
+                order.setRiderName(r.getUser().getName());
+                order.setRiderPhone(r.getContact());
+            });
+        }
+    }
+
+    @GetMapping("/rider/{riderId}")
+    public List<Order> getRiderOrders(@PathVariable Long riderId) {
+        List<Order> orders = orderRepository.findByRiderId(riderId);
+        for (Order order : orders) {
+            populateOrderDetails(order);
+        }
+        return orders;
+    }
+
+    @PatchMapping("/{orderId}/tracking")
+    public ResponseEntity<?> updateTrackingStatus(@PathVariable Long orderId, @RequestBody Map<String, String> payload) {
+        String status = payload.get("status");
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order != null) {
+            order.setTrackingStatus(status);
+            if (status.equalsIgnoreCase("Delivered")) {
+                order.setStatus("Completed");
+                order.setPaymentStatus("Paid");
+            }
+            orderRepository.save(order);
+            return ResponseEntity.ok(order);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

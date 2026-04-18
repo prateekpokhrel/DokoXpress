@@ -17,4 +17,9 @@ export const DASHBOARD_NAV = {
     { label: 'Vendors', href: '/admin/vendors', icon: Store },
     { label: 'Verification', href: '/admin/verification', icon: ShieldCheck },
   ],
+  rider: [
+    { label: 'Dashboard', href: '/rider/dashboard', icon: BarChart3 },
+    { label: 'Deliveries', href: '/rider/orders', icon: ClipboardList },
+    { label: 'Profile', href: '/rider/profile', icon: UserCircle },
+  ],
 };

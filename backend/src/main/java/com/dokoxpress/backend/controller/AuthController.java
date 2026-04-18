@@ -1,7 +1,9 @@
 package com.dokoxpress.backend.controller;
 
 import com.dokoxpress.backend.config.JwtUtil;
+import com.dokoxpress.backend.model.Rider;
 import com.dokoxpress.backend.model.User;
+import com.dokoxpress.backend.repository.RiderRepository;
 import com.dokoxpress.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RiderRepository riderRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, Object> payload) {
@@ -77,6 +82,29 @@ public class AuthController {
         return signup(payload, "vendor");
     }
 
+    @PostMapping("/signup/rider")
+    public ResponseEntity<?> signupRider(@RequestBody Map<String, Object> payload) {
+        ResponseEntity<?> userResp = signup(payload, "rider");
+        if (userResp.getStatusCode().is2xxSuccessful()) {
+            Map<String, Object> body = (Map<String, Object>) userResp.getBody();
+            Long userId = (Long) ((Map<String, Object>) body.get("session")).get("userId");
+            User user = userRepository.findById(userId).orElseThrow();
+            
+            Rider rider = new Rider();
+            rider.setUser(user);
+            rider.setDrivingLicensePhoto(String.valueOf(payload.get("drivingLicensePhoto")));
+            rider.setCitizenshipPhoto(String.valueOf(payload.get("citizenshipPhoto")));
+            rider.setVehicleNumber(String.valueOf(payload.get("vehicleNumber")));
+            rider.setAge(Integer.parseInt(String.valueOf(payload.get("age"))));
+            rider.setCountry(String.valueOf(payload.get("country")));
+            rider.setDistrict(String.valueOf(payload.get("district")));
+            rider.setCity(String.valueOf(payload.get("city")));
+            rider.setContact(String.valueOf(payload.get("phone")));
+            riderRepository.save(rider);
+        }
+        return userResp;
+    }
+
     @PostMapping("/signup/admin")
     public ResponseEntity<?> signupAdmin(@RequestBody Map<String, Object> payload) {
         User user = new User();
@@ -120,6 +148,10 @@ public class AuthController {
         user.setEmail(email);
         user.setPassword(String.valueOf(payload.get("password")));
         user.setName(String.valueOf(payload.getOrDefault("fullName", "User")));
+        user.setPhone(String.valueOf(payload.getOrDefault("phone", "")));
+        user.setCountry(String.valueOf(payload.getOrDefault("country", "")));
+        user.setState(String.valueOf(payload.getOrDefault("state", payload.getOrDefault("district", ""))));
+        user.setCity(String.valueOf(payload.getOrDefault("city", "")));
         user.setRole(role);
         userRepository.save(user);
 

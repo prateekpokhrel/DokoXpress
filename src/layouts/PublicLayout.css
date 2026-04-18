@@ -1,2 +1,92 @@
 /* Styles for PublicLayout.jsx */
 
+/* ---------- ROOT WRAPPER ---------- */
+
+.public-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8fafc;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ---------- MESH BACKGROUND ---------- */
+
+.bg-mesh {
+    background-image:
+        radial-gradient(at 20% 30%, rgba(249, 115, 22, 0.12) 0px, transparent 50%),
+        radial-gradient(at 80% 20%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 80%, rgba(16, 185, 129, 0.12) 0px, transparent 50%);
+}
+
+/* Optional warm tone base */
+.bg-sand {
+    background-color: #fffaf5;
+}
+
+/* ---------- MAIN CONTENT ---------- */
+
+.public-main {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    flex: 1;
+    animation: fadeInUp 0.3s ease;
+}
+
+/* ---------- NAVBAR SPACING FIX ---------- */
+
+.public-layout>nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.75);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+/* ---------- PAGE TRANSITION ---------- */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- CONTAINER IMPROVEMENT ---------- */
+
+.public-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .public-main {
+        padding: 20px 12px;
+    }
+}
+
+/* ---------- OPTIONAL GLASS EFFECT ---------- */
+
+.public-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+}
+
+/* ---------- SCROLL SMOOTH ---------- */
+
+html {
+    scroll-behavior: smooth;
+}

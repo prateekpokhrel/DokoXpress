@@ -1,2 +1,93 @@
 /* Styles for AppProviders.jsx */
 
+/* Root app container normalization */
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Global font smoothing (better UI quality) */
+body {
+    font-family: 'Inter', 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-main, #f8fafc);
+    color: var(--text-main, #0f172a);
+    overflow-x: hidden;
+}
+
+/* Universal box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Smooth transitions globally */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Scrollbar styling (modern look) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.4);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.6);
+}
+
+/* Remove default button/input weird styles */
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+/* Prevent image blur / improve rendering */
+img {
+    max-width: 100%;
+    display: block;
+    image-rendering: auto;
+}
+
+/* Toast layering fix (important) */
+.toast-container {
+    z-index: 9999;
+}
+
+/* Prevent layout shift */
+#root {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Optional: smooth fade for page transitions */
+.app-fade {
+    animation: appFade 0.25s ease-in-out;
+}
+
+@keyframes appFade {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

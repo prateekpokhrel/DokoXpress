@@ -1,2 +1,141 @@
 /* Styles for ProductEditorModal.jsx */
 
+/* Modal Form Grid */
+form {
+    width: 100%;
+}
+
+/* Labels */
+label span,
+.form-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Inputs & Textareas */
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e2eaed;
+    background: #f8fbfc;
+    color: #1e293b;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    background: #ffffff;
+}
+
+/* Textarea specific */
+textarea {
+    resize: none;
+    min-height: 90px;
+}
+
+/* Image Upload Box */
+label[for="product-image-upload"] {
+    border-radius: 16px;
+    border: 2px dashed #cbd5e1;
+    background: #f8fbfc;
+    transition: all 0.25s ease;
+}
+
+label[for="product-image-upload"]:hover {
+    border-color: #f97316;
+    background: #fff7ed;
+}
+
+/* Image Preview FIX (important for blur) */
+label img {
+    image-rendering: auto;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* Overlay animation */
+.group:hover .overlay {
+    opacity: 1;
+}
+
+.overlay {
+    transition: opacity 0.25s ease;
+}
+
+/* Error message */
+.shake {
+    animation: shake 0.25s ease-in-out;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Checkbox section */
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* Buttons spacing fix */
+button {
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Smooth modal spacing */
+.md\\:col-span-2 {
+    margin-bottom: 6px;
+}
+
+/* Better spacing for form fields */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Improve small helper text */
+.text-xs {
+    font-size: 12px;
+}
+
+/* Subtle hover for inputs */
+input:hover,
+textarea:hover,
+select:hover {
+    border-color: #cbd5e1;
+}

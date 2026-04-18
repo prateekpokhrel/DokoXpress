@@ -1,2 +1,207 @@
 /* Styles for AdminVerificationPage.jsx */
 
+/* ---------- PAGE ROOT ---------- */
+
+.admin-verify-page {
+    width: 100%;
+    animation: fadeIn 0.3s ease;
+}
+
+/* ---------- CARD ENHANCEMENT ---------- */
+
+.admin-verify-card {
+    border-radius: 24px;
+    background: var(--bg-card, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+    transition: all 0.25s ease;
+}
+
+.admin-verify-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- HEADER ---------- */
+
+.admin-verify-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.admin-verify-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: #f97316;
+}
+
+.admin-verify-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.admin-verify-meta {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* ---------- DOCUMENT SECTION ---------- */
+
+.admin-doc-section {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 20px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ---------- DOCUMENT BLOCK ---------- */
+
+.admin-doc-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-doc-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #94a3b8;
+}
+
+/* ---------- IMAGE PREVIEW ---------- */
+
+.admin-doc-image-wrapper {
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    aspect-ratio: 1.6 / 1;
+}
+
+.admin-doc-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Hover zoom */
+.admin-doc-image-wrapper:hover .admin-doc-image {
+    transform: scale(1.05);
+}
+
+/* ---------- OVERLAY ---------- */
+
+.admin-doc-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.25s ease;
+}
+
+.admin-doc-image-wrapper:hover .admin-doc-overlay {
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+}
+
+/* ---------- FALLBACK TEXT ---------- */
+
+.admin-doc-fallback {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0f172a;
+}
+
+/* ---------- ACTION BUTTON ---------- */
+
+.admin-verify-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.admin-verify-actions button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.admin-verify-actions button:hover {
+    transform: translateY(-1px);
+}
+
+/* ---------- GRID ---------- */
+
+.admin-verify-grid {
+    display: grid;
+    gap: 16px;
+}
+
+/* ---------- EMPTY STATE ---------- */
+
+.admin-verify-empty {
+    text-align: center;
+    padding: 30px;
+    color: #94a3b8;
+}
+
+/* ---------- SKELETON ---------- */
+
+.admin-verify-skeleton {
+    border-radius: 24px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* ---------- ANIMATIONS ---------- */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .admin-verify-title {
+        font-size: 18px;
+    }
+
+    .admin-doc-section {
+        padding: 12px;
+    }
+}

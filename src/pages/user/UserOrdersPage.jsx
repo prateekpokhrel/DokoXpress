@@ -73,9 +73,22 @@ export function UserOrdersPage() {
                     )}
                   </div>
                   
-                  <p className="text-xs font-bold uppercase tracking-widest mb-6" style={{ color: 'var(--text-muted)' }}>
-                    Placed {formatDateTime(order.placedAt)} <span className="mx-2 opacity-50">•</span> ETA {formatDateTime(order.deliveryEta)}
+                  <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--text-muted)' }}>
+                    Ordered {formatDateTime(order.placedAt)} <span className="mx-2 opacity-50">•</span> Payment: {order.paymentMethod}
                   </p>
+
+                  <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <div className="flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2">
+                       <div className={`h-2 w-2 rounded-full ${order.trackingStatus === 'Delivered' ? 'bg-emerald-500' : 'bg-orange-500 animate-pulse'}`} />
+                       <span className="text-xs font-black uppercase text-white/70">Status: {order.trackingStatus}</span>
+                    </div>
+
+                    {order.riderName && (
+                       <div className="flex items-center gap-2 rounded-full bg-teal-500/10 border border-teal-500/20 px-4 py-2">
+                          <span className="text-xs font-black uppercase text-teal-400">Rider: {order.riderName} ({order.riderPhone})</span>
+                       </div>
+                    )}
+                  </div>
                   
                   <div className="grid gap-3">
                     {order.items.map((item) => (
@@ -110,7 +123,7 @@ export function UserOrdersPage() {
                 >
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--text-muted)' }}>Order total</p>
                   <p className="font-display text-4xl font-black" style={{ color: 'var(--text-main)' }}>
-                    {formatCurrency(order.total)}
+                    {formatCurrency(order.totalPrice || order.total)}
                   </p>
                   
                   <div className="mt-6 flex items-center gap-3 border-t pt-5 text-[11px] font-bold uppercase tracking-wider" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>

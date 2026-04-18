@@ -57,8 +57,8 @@ export function MarketplaceProvider({ children }) {
         addItemToCart: addToCart,
         changeCartQuantity: updateCartQuantity,
         deleteCartItem: removeFromCart,
-        checkout: async (userId) => {
-          await syncAfter(placeOrders(userId));
+        checkout: async (userId, paymentMethod) => {
+          await syncAfter(placeOrders(userId, paymentMethod));
         },
         saveVendorProduct: async (vendorId, payload) => {
           await syncAfter(upsertVendorProduct(vendorId, payload));

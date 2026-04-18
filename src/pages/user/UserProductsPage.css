@@ -22,6 +22,7 @@
 }
 
 .fade-in {
+  /* Removed transform to prevent breaking fixed-position children */
   animation: fadeIn 0.5s ease-out forwards;
 }
 

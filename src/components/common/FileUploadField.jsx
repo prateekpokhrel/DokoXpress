@@ -1,8 +1,9 @@
+import { forwardRef } from 'react';
 import { UploadCloud } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import './FileUploadField.css';
 
-export function FileUploadField({ label, helper, error, className, fileName, ...props }) {
+export const FileUploadField = forwardRef(({ label, helper, error, className, fileName, ...props }, ref) => {
   return (
     <label className="flex w-full cursor-pointer flex-col gap-2">
       <span className="text-sm font-bold text-white/70 ml-1">{label}</span>
@@ -11,8 +12,10 @@ export function FileUploadField({ label, helper, error, className, fileName, ...
         <span className="text-sm font-bold text-white">{fileName || 'Choose a file to upload'}</span>
         <span className="mt-1 text-xs font-medium text-white/40">{helper}</span>
       </div>
-      <input className="hidden" type="file" {...props} />
+      <input className="hidden" type="file" ref={ref} {...props} />
       {error && <span className="text-xs font-bold text-red-400 ml-1 mt-1">{error}</span>}
     </label>
   );
-}
+});
+
+FileUploadField.displayName = 'FileUploadField';

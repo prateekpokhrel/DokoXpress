@@ -1,2 +1,169 @@
 /* Styles for AdminOverviewPage.jsx */
 
+/* ---------- PAGE ROOT ---------- */
+
+.admin-page {
+    width: 100%;
+    animation: adminFade 0.3s ease;
+}
+
+/* ---------- GRID POLISH ---------- */
+
+.admin-grid {
+    display: grid;
+    gap: 16px;
+}
+
+/* ---------- CARD ENHANCEMENT ---------- */
+
+.admin-card {
+    border-radius: 24px;
+    background: var(--bg-card, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+    transition: all 0.25s ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- STAT CARDS ---------- */
+
+.admin-stat {
+    transition: all 0.25s ease;
+}
+
+.admin-stat:hover {
+    transform: translateY(-3px) scale(1.01);
+}
+
+/* ---------- RECENT ORDERS ---------- */
+
+.admin-order-item {
+    border-radius: 20px;
+    background: #f8fafc;
+    padding: 14px;
+    transition: all 0.2s ease;
+}
+
+.admin-order-item:hover {
+    background: #f1f5f9;
+    transform: scale(1.01);
+}
+
+/* ---------- PENDING VENDORS ---------- */
+
+.admin-vendor-item {
+    border-radius: 20px;
+    background: #f8fafc;
+    padding: 14px;
+    transition: all 0.2s ease;
+}
+
+.admin-vendor-item:hover {
+    background: #fff7ed;
+    transform: translateY(-1px);
+}
+
+/* ---------- SUCCESS BOX ---------- */
+
+.admin-success-box {
+    background: #ecfdf5;
+    color: #065f46;
+    border-radius: 18px;
+    padding: 14px;
+    font-weight: 500;
+}
+
+/* ---------- SMALL METRIC CARDS ---------- */
+
+.admin-mini-card {
+    border-radius: 20px;
+    padding: 18px;
+    transition: all 0.25s ease;
+}
+
+.admin-mini-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- TABLE ---------- */
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table thead {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.admin-table th {
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+
+.admin-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+/* Row hover */
+.admin-table tbody tr {
+    transition: all 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(248, 250, 252, 0.7);
+}
+
+/* ---------- SCROLLBAR (TABLE) ---------- */
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ---------- EMPTY STATE ---------- */
+
+.admin-empty {
+    text-align: center;
+    color: #94a3b8;
+    padding: 20px;
+    font-size: 14px;
+}
+
+/* ---------- ANIMATION ---------- */
+
+@keyframes adminFade {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+
+    .admin-table td,
+    .admin-table th {
+        font-size: 12px;
+    }
+
+    .admin-mini-card {
+        padding: 14px;
+    }
+}

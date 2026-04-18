@@ -1,13 +1,8 @@
 /* Styles for DashboardLayout.jsx */
 
-/* ==========================================================================
-   DashboardLayout.css - Structural Shadows & Transitions
-   ========================================================================== */
-
-/* Heavy structural shadow to lift the main header off the page floor */
 .dashboard-header-glow {
-  box-shadow: 
-    0 15px 35px -10px rgba(0, 0, 0, 0.7), 
+  box-shadow:
+    0 15px 35px -10px rgba(0, 0, 0, 0.7),
     inset 0 0 20px -5px rgba(255, 255, 255, 0.03);
 }
 
@@ -20,6 +15,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

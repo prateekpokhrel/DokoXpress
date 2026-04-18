@@ -162,3 +162,46 @@ export async function signupAdmin(payload) {
     return buildAuthResponse(newAdmin, payload.remember);
   }, 600);
 }
+export async function signupRider(payload) {
+  if (!USE_MOCKS) {
+    // 1. First signup as a regular user to get account
+    const userPayload = {
+      fullName: payload.fullName,
+      email: payload.email,
+      phone: payload.phone,
+      password: payload.password,
+      country: payload.country,
+      state: payload.district, // using district as state mapping if needed
+      city: payload.city,
+      role: 'rider',
+      remember: payload.remember
+    };
+    
+    // Using existing customer signup with role 'rider' if backend supports it 
+    // or a dedicated signup endpoint. Let's assume a dedicated signup endpoint is better.
+    const response = await apiClient.post('/auth/signup/rider', payload);
+    const data = response.data;
+    if (data && data.session) {
+      const normalized = normalizeUser(data.user);
+      data.session.storage = toStorageMode(payload.remember);
+      data.session.user = normalized;
+      data.user = normalized;
+      persistSession(data.session);
+    }
+    return data;
+  }
+
+  return simulateNetwork(() => {
+    const database = readMockDatabase();
+    if (findAccountByEmail(database, payload.email)) {
+      throw new Error('An account with this email already exists.');
+    }
+    const newRider = { id: `rid_${Date.now()}`, role: 'rider', ...payload };
+    updateMockDatabase((draft) => {
+      draft.riders = draft.riders || [];
+      draft.riders.push(newRider);
+      return draft;
+    });
+    return buildAuthResponse(newRider, payload.remember);
+  }, 1000);
+}
