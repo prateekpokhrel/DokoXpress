@@ -29,7 +29,7 @@ export const addProduct = async (product) => {
     }
 };
 
-// All Products
+// Get All Products
 export const getProducts = async () => {
     try {
         const res = await API.get("/products");
