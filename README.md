@@ -12,12 +12,12 @@ Multi-vendor e-commerce frontend built with React, Vite, JSX, Tailwind CSS, Reac
 - API/service layer structured for future Spring Boot + JWT integration
 - Account creation for customer, vendor, and admin roles
 
-## Platform Credentials
+## Examples of some Platform Credentials
 
 - Customer: `ava.customer@dokoxpress.com`
 - Vendor: `milan.vendor@dokoxpress.com`
 - Admin: `admin@dokoxpress.com`
-- Password: `Password@123`
+- Password: `Developer_Secret`
 
 ## Project Structure
 
