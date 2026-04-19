@@ -7,7 +7,6 @@
 [![React](https://img.shields.io/badge/React-18.x-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF.svg)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC.svg)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **DokoXpress** is a premium, full-stack logistics and commerce platform engineered to bridge the gap between local Nepali vendors and urban consumers. By focusing on hyper-local relevance and robust verification, it provides a trusted ecosystem for rapid commerce in fragmented markets.
 
