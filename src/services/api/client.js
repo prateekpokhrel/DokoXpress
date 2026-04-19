@@ -8,6 +8,7 @@ export const apiClient = axios.create({
   },
 });
 
+// for deployment try
 // import axios from 'axios';
 
 // const API = import.meta.env.VITE_API_BASE_URL;
