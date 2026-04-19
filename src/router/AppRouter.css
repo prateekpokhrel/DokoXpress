@@ -1,15 +1,12 @@
 /* Styles for AppRouter.jsx */
 
-/* ---------- PAGE WRAPPER ---------- */
-
-/* Apply this class to layouts if needed */
 .route-page {
     width: 100%;
     min-height: 100vh;
     animation: routeFade 0.25s ease-in-out;
 }
 
-/* ---------- PAGE TRANSITION ---------- */
+/*  PAGE TRANSITION  */
 
 @keyframes routeFade {
     from {
@@ -23,7 +20,7 @@
     }
 }
 
-/* ---------- DASHBOARD SMOOTH LOAD ---------- */
+/*  DASHBOARD SMOOTH LOAD  */
 
 .dashboard-page {
     animation: dashboardEnter 0.3s ease;
@@ -41,7 +38,7 @@
     }
 }
 
-/* ---------- PUBLIC PAGES (HOME / LOGIN / SIGNUP) ---------- */
+/*  PUBLIC PAGES (HOME / LOGIN / SIGNUP)  */
 
 .public-page {
     animation: publicFade 0.3s ease;
@@ -59,7 +56,7 @@
     }
 }
 
-/* ---------- ROUTE LOADING (OPTIONAL SKELETON) ---------- */
+/*  ROUTE LOADING (OPTIONAL SKELETON)  */
 
 .route-loading {
     display: flex;
@@ -84,7 +81,7 @@
     }
 }
 
-/* ---------- NOT FOUND PAGE ---------- */
+/*  NOT FOUND PAGE  */
 
 .notfound-page {
     display: flex;
@@ -108,13 +105,13 @@
     color: #64748b;
 }
 
-/* ---------- SCROLL RESET FIX ---------- */
+/*  SCROLL RESET FIX  */
 
 .route-scroll-reset {
     scroll-behavior: smooth;
 }
 
-/* ---------- MOBILE OPTIMIZATION ---------- */
+/*  MOBILE OPTIMIZATION  */
 
 @media (max-width: 640px) {
     .route-page {

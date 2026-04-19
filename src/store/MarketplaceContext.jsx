@@ -13,7 +13,6 @@ import {
 
 const MarketplaceContext = createContext(null);
 
-// Will be injected from AuthContext via MarketplaceProvider props
 let _updateSessionUser = null;
 export function injectSessionUserUpdater(fn) {
   _updateSessionUser = fn;
@@ -74,7 +73,6 @@ export function MarketplaceProvider({ children }) {
         },
         saveCustomerProfile: async (userId, updates) => {
           const result = await syncAfter(updateCustomerProfile(userId, updates));
-          // Persist updated user into the session so it survives page refresh
           if (_updateSessionUser && result) _updateSessionUser(result);
           return result;
         },

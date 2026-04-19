@@ -107,14 +107,14 @@ export function SignupPage() {
       title="Create your account"
     >
       <div className="space-y-8">
-        {/* Role tabs — Customer, Vendor & Rider */}
+        {/* Role tabs - Customer, Vendor & Rider */}
         <div className="grid grid-cols-3 gap-2 rounded-[16px] border p-1.5" style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}>
           {ROLES.map((candidate) => (
             <button
               key={candidate}
               className={`rounded-[12px] py-2.5 text-xs font-black uppercase tracking-widest transition-all duration-300 ${signupRole === candidate
-                  ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)]'
-                  : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
+                ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)]'
+                : 'text-slate-500 hover:text-slate-800 hover:bg-white/60'
                 }`}
               onClick={() => setSignupRole(candidate)}
               type="button"

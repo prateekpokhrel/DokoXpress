@@ -3,9 +3,6 @@ import { Button } from '@/components/common/Button';
 import { formatCurrency } from '@/utils/format';
 import './ProductCard.css';
 
-/**
- * Utility: Calculate distance between 2 coordinates (Haversine Formula)
- */
 function getDistanceInKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -30,13 +27,13 @@ export function ProductCard({
   onDecrement
 }) {
 
-  /* ================= SAFE CITY MATCH ================= */
+  /* Safe city match */
   const userCity = userLocation?.city?.trim().toLowerCase();
   const productCity = product.locationTag?.trim().toLowerCase();
 
   const isSameCity = userCity && productCity && userCity === productCity;
 
-  /* ================= SAFE DISTANCE ================= */
+  /* Safe distance */
   let isWithinRadius = false;
 
   if (
@@ -55,7 +52,7 @@ export function ProductCard({
     isWithinRadius = distance <= 3;
   }
 
-  /* ================= FINAL DELIVERY LOGIC ================= */
+  /* Final delivery logic */
   const showFastDelivery =
     product.isFastDelivery &&
     (
@@ -64,11 +61,11 @@ export function ProductCard({
       !product.vendorLat    // OR fallback if no coords
     );
 
-  /* ================= RENDER ================= */
+  /* Render */
   return (
     <div className="product-card-glow group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 transition-all duration-500 hover:-translate-y-2 hover:border-white/20">
 
-      {/* ================= IMAGE ================= */}
+      {/* Image */}
       <div className="relative h-56 shrink-0 overflow-hidden">
         <img
           alt={product.name}
@@ -84,7 +81,7 @@ export function ProductCard({
 
         <div className="image-overlay"></div>
 
-        {/* ================= BADGES ================= */}
+        {/* Badges */}
         <div className="absolute left-4 top-4 z-10 flex flex-wrap gap-2">
           <span className="badge">
             {product.category}
@@ -98,7 +95,7 @@ export function ProductCard({
         </div>
       </div>
 
-      {/* ================= CONTENT ================= */}
+      {/* Content */}
       <div className="flex flex-1 flex-col p-6">
 
         <div className="flex items-start justify-between gap-4">
@@ -119,7 +116,7 @@ export function ProductCard({
 
         <div className="flex-1"></div>
 
-        {/* ================= META ================= */}
+        {/* Meta */}
         <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold">
 
           <span className="pill flex items-center gap-1.5">
@@ -143,7 +140,7 @@ export function ProductCard({
           </span>
         </div>
 
-        {/* ================= FOOTER ================= */}
+        {/* Footer */}
         <div className="mt-5 flex items-center justify-between pt-2">
 
           <div className="flex items-center gap-2">
@@ -153,7 +150,7 @@ export function ProductCard({
             </p>
           </div>
 
-          {/* ================= CART ================= */}
+          {/* Cart */}
           {cartQuantity > 0 ? (
             <div className="flex h-[40px] items-center gap-2 rounded-[16px] bg-orange-500 p-1">
               <button

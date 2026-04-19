@@ -61,7 +61,6 @@ export function UserProductsPage() {
     void refreshCart();
   }, [refreshCart, user]);
 
-  // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
@@ -194,7 +193,6 @@ export function UserProductsPage() {
         </Card>
       </div>
 
-      {/* Removed dark-theme-filters override */}
       <div>
         <ProductFilters filters={filters} locations={locations} onChange={setFilters} />
       </div>

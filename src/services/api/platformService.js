@@ -3,18 +3,16 @@ import { apiClient } from './client';
 
 export async function getMarketplaceSnapshot() {
   try {
-    // Fetch users, products AND orders from the real backend in parallel
     const [usersResponse, productsResponse, ordersResponse] = await Promise.all([
       apiClient.get('/users'),
       apiClient.get('/products'),
       apiClient.get('/orders'),
     ]);
- 
+
     const realUsers = usersResponse.data;
     const realProducts = productsResponse.data;
     const realOrders = ordersResponse.data;
 
-    // Initialize empty snapshot
     const snapshot = {
       users: [],
       vendors: [],
@@ -24,13 +22,13 @@ export async function getMarketplaceSnapshot() {
       carts: {},
     };
 
-    // ── Users ──────────────────────────────────────────────────────────────
+    // Users
     const mappedRealUsers = realUsers.map((u) => normalizeUser(u));
     snapshot.users = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'user' || !u.role);
     snapshot.vendors = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'vendor');
     snapshot.admins = mappedRealUsers.filter((u) => u.role?.toLowerCase() === 'admin');
 
-    // ── Products ───────────────────────────────────────────────────────────
+    // Products
     snapshot.products = realProducts
       .filter((p) => !p.status || p.status === 'ACTIVE' || p.status === 'active')
       .map((p) => {
@@ -49,7 +47,7 @@ export async function getMarketplaceSnapshot() {
         };
       });
 
-    // ── Orders ────────────────────────────────────────────────────────────
+    // Orders
     snapshot.orders = realOrders.map((o) => {
       const customer = mappedRealUsers.find((u) => String(u.id) === String(o.userId));
       return {
@@ -77,7 +75,7 @@ export async function getMarketplaceSnapshot() {
     return snapshot;
   } catch (error) {
     console.error('Platform refresh failed:', error);
-    // Return empty but valid snapshot on error
+
     return { users: [], vendors: [], admins: [], products: [], orders: [] };
   }
 }

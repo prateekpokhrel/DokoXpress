@@ -13,7 +13,7 @@ function buildAuthResponse(account, remember) {
     userId: normalized.id,
     role: normalized.role,
     storage: toStorageMode(remember),
-    user: normalized, // Cache normalized user in session
+    user: normalized,
   };
 
   persistSession(session);
@@ -164,21 +164,18 @@ export async function signupAdmin(payload) {
 }
 export async function signupRider(payload) {
   if (!USE_MOCKS) {
-    // 1. First signup as a regular user to get account
     const userPayload = {
       fullName: payload.fullName,
       email: payload.email,
       phone: payload.phone,
       password: payload.password,
       country: payload.country,
-      state: payload.district, // using district as state mapping if needed
+      state: payload.district,
       city: payload.city,
       role: 'rider',
       remember: payload.remember
     };
-    
-    // Using existing customer signup with role 'rider' if backend supports it 
-    // or a dedicated signup endpoint. Let's assume a dedicated signup endpoint is better.
+
     const response = await apiClient.post('/auth/signup/rider', payload);
     const data = response.data;
     if (data && data.session) {

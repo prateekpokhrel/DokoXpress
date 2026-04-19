@@ -17,7 +17,7 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) {
         String adminEmail = "admin.dokoxpress@gmail.com";
 
-        // Only create admin if not exists
+        // create admin if its not exist
         if (userRepository.findByEmail(adminEmail).isEmpty()) {
             User admin = new User();
             admin.setEmail(adminEmail);

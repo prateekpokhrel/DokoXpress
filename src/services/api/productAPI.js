@@ -1,6 +1,6 @@
 import axios from "axios";
 
-//  Base URL (easy to change later)
+//  Base URL
 const API = axios.create({
     baseURL: "http://localhost:8081/api",
     headers: {
@@ -8,7 +8,6 @@ const API = axios.create({
     },
 });
 
-//  OPTIONAL: attach JWT token (if using login)
 API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -17,11 +16,9 @@ API.interceptors.request.use((config) => {
     return config;
 });
 
-// ==============================
 // PRODUCT APIs
-// ==============================
 
-// ➕ Add Product
+// Add Product
 export const addProduct = async (product) => {
     try {
         const res = await API.post("/products", product);
@@ -32,7 +29,7 @@ export const addProduct = async (product) => {
     }
 };
 
-// 📥 Get All Products
+// All Products
 export const getProducts = async () => {
     try {
         const res = await API.get("/products");
@@ -43,7 +40,7 @@ export const getProducts = async () => {
     }
 };
 
-// ❌ Delete Product (future use)
+// Delete Product (future use)
 export const deleteProduct = async (id) => {
     try {
         const res = await API.delete(`/products/${id}`);

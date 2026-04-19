@@ -1,7 +1,5 @@
 /* Styles for NotFoundPage.jsx */
 
-/* ---------- PAGE WRAPPER ---------- */
-
 .notfound-wrapper {
     display: grid;
     place-items: center;
@@ -13,7 +11,7 @@
             #fef3c7 100%);
 }
 
-/* ---------- CARD ---------- */
+/*  CARD  */
 
 .notfound-card {
     max-width: 520px;
@@ -21,7 +19,7 @@
     animation: fadeUp 0.35s ease;
 }
 
-/* ---------- ICON BOX ---------- */
+/*  ICON BOX  */
 
 .notfound-icon-box {
     width: 64px;
@@ -35,7 +33,7 @@
     animation: floatIcon 2.5s ease-in-out infinite;
 }
 
-/* ---------- TITLE ---------- */
+/*  TITLE  */
 
 .notfound-title {
     font-size: 34px;
@@ -43,7 +41,7 @@
     color: #0f172a;
 }
 
-/* ---------- DESCRIPTION ---------- */
+/*  DESCRIPTION  */
 
 .notfound-text {
     margin-top: 12px;
@@ -52,7 +50,7 @@
     color: #64748b;
 }
 
-/* ---------- BUTTON AREA ---------- */
+/*  BUTTON AREA  */
 
 .notfound-actions {
     margin-top: 24px;
@@ -60,7 +58,7 @@
     justify-content: center;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/*  ANIMATIONS  */
 
 @keyframes fadeUp {
     from {
@@ -86,7 +84,7 @@
     }
 }
 
-/* ---------- HOVER EFFECT ---------- */
+/*  HOVER EFFECT  */
 
 .notfound-card button {
     transition: all 0.2s ease;
@@ -96,7 +94,7 @@
     transform: translateY(-1px);
 }
 
-/* ---------- MOBILE ---------- */
+/*  MOBILE  */
 
 @media (max-width: 640px) {
     .notfound-title {

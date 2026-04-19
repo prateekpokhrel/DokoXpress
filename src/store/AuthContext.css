@@ -1,8 +1,5 @@
 /* Styles for AuthContext.jsx */
 
-/* ---------- AUTH ROOT STATE HELPERS ---------- */
-
-/* Prevent interaction when auth is busy */
 .auth-busy {
     pointer-events: none;
     opacity: 0.7;
@@ -25,8 +22,6 @@
         transform: translateY(0);
     }
 }
-
-/* ---------- FULLSCREEN AUTH LOADER (OPTIONAL USE) ---------- */
 
 .auth-loading-overlay {
     position: fixed;
@@ -55,8 +50,6 @@
     }
 }
 
-/* ---------- SESSION TRANSITION ---------- */
-
 .auth-session-change {
     animation: sessionPop 0.25s ease;
 }
@@ -72,8 +65,6 @@
         transform: scale(1);
     }
 }
-
-/* ---------- ERROR / WARNING STATES ---------- */
 
 .auth-error {
     border: 1px solid rgba(239, 68, 68, 0.4);
@@ -95,8 +86,6 @@
     font-weight: 500;
 }
 
-/* ---------- BUTTON LOADING STATE ---------- */
-
 .auth-btn-loading {
     position: relative;
     color: transparent !important;
@@ -115,7 +104,7 @@
     animation: spin 0.7s linear infinite;
 }
 
-/* ---------- INPUT DISABLED STYLE ---------- */
+/* INPUT DISABLED STYLE  */
 
 .auth-disabled-input {
     background-color: #f1f5f9 !important;
@@ -123,7 +112,7 @@
     opacity: 0.7;
 }
 
-/* ---------- MOBILE OPTIMIZATION ---------- */
+/* MOBILE OPTIMIZATION */
 
 @media (max-width: 640px) {
     .auth-loading-overlay {

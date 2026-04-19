@@ -21,7 +21,6 @@ export async function updateCustomerProfile(userId, updates) {
     const response = await apiClient.put(`/users/${userId}`, payload);
     return normalizeUser(response.data);
   }
-  // ... rest of previous code (keeping it for reference/fallback)
   const userIdStr = String(userId);
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({
@@ -52,7 +51,7 @@ export async function updateVendorProfile(userId, updates) {
     const response = await apiClient.put(`/users/${userId}`, payload);
     return normalizeUser(response.data);
   }
-  
+
   const userIdStr = String(userId);
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({

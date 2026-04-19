@@ -1,10 +1,5 @@
 /* Styles for MarketplaceContext.jsx */
 
-/* ===============================
-   Marketplace Global Styling
-================================ */
-
-/* Loader overlay (used when isHydrating = true) */
 .marketplace-loader {
   position: fixed;
   top: 0;
@@ -37,9 +32,7 @@
 }
 
 
-/* ===============================
-   Marketplace Layout Helpers
-================================ */
+/* Marketplace Layout Helpers */
 
 .marketplace-container {
   padding: 20px;
@@ -52,9 +45,7 @@
 }
 
 
-/* ===============================
-   Cards (Products / Vendors)
-================================ */
+/* Cards (Products / Vendors) */
 
 .marketplace-card {
   background: rgba(255, 255, 255, 0.05);
@@ -71,9 +62,7 @@
 }
 
 
-/* ===============================
-   Buttons
-================================ */
+/* Buttons */
 
 .marketplace-btn {
   padding: 10px 16px;
@@ -97,9 +86,7 @@
 }
 
 
-/* ===============================
-   Inputs
-================================ */
+/* Inputs */
 
 .marketplace-input {
   width: 100%;
@@ -117,9 +104,7 @@
 }
 
 
-/* ===============================
-   Status Tags
-================================ */
+/* Status Tags */
 
 .status-badge {
   padding: 4px 10px;
@@ -144,9 +129,7 @@
 }
 
 
-/* ===============================
-   Utility Classes
-================================ */
+/* Utility Classes */
 
 .flex-center {
   display: flex;

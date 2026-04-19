@@ -1,4 +1,4 @@
-/* ================= SEARCH INPUT (NUCLEAR FIX) ================= */
+/* Search Input (NUCLEAR FIX) */
 .search-input {
   all: unset;
   /*  removes EVERYTHING */
@@ -27,7 +27,7 @@
   -webkit-text-fill-color: white !important;
 }
 
-/* ================= SELECT FIX ================= */
+/* Select Fix */
 .filter-select {
   appearance: none;
   -webkit-appearance: none;
@@ -62,7 +62,7 @@
   color: white;
 }
 
-/* ================= ANIMATION ================= */
+/* Animation */
 .surface-panel {
   opacity: 0;
   animation: filterFadeIn 0.4s ease-out forwards;

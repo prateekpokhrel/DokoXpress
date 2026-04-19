@@ -13,7 +13,7 @@ export function AuthLayout({
   return (
     <div className="grid min-h-[calc(100vh-140px)] gap-6 lg:grid-cols-[1.05fr_0.95fr] auth-fade-in">
 
-      {/* LEFT PANEL — decorative / info side */}
+      {/* LEFT PANEL - decorative / info side */}
       <section
         className="relative overflow-hidden rounded-[32px] px-6 py-8 shadow-sm sm:px-10 sm:py-10 border"
         style={{ backgroundColor: '#fff7f0', borderColor: '#fde8d5' }}
@@ -33,7 +33,7 @@ export function AuthLayout({
         </div>
       </section>
 
-      {/* RIGHT PANEL — form */}
+      {/* RIGHT PANEL - form */}
       <section
         className="relative flex items-center justify-center p-6 sm:p-8 rounded-[32px] border overflow-hidden shadow-sm"
         style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}

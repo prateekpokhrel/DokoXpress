@@ -1,30 +1,26 @@
 /* Styles for Sidebar.jsx */
 
-/* ==========================================================================
-   Sidebar.css - Premium Dark Mode Shadows & Behaviors
-   ========================================================================== */
-
-/* Gives the sidebar a deep, heavy shadow so it physically separates from 
-   the background, alongside a faint inner white glow mimicking glass depth. */
 .sidebar-glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.05), 
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.05),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
-/* Optional: Smooth scrollbar just for the nav area if links overflow on small screens */
 nav::-webkit-scrollbar {
   width: 4px;
 }
+
 nav::-webkit-scrollbar-track {
   background: transparent;
 }
+
 nav::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
+
 nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(249, 115, 22, 0.5); /* Orange hover */
+  background: rgba(249, 115, 22, 0.5);
 }

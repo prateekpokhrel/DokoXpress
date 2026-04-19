@@ -1,7 +1,5 @@
 /* Styles for EmptyState.jsx */
 
-/* No specific CSS needed as Card and Button handle it, 
-   but we can add a subtle pulse to the icon */
 .EmptyState svg {
   filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.2));
 }

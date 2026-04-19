@@ -32,7 +32,7 @@ export function UserOrdersPage() {
         title="Order history"
       />
 
-      {/* ================= SECTION HEADER ================= */}
+      {/*  SECTION HEADER  */}
       <div className="mb-6 mt-10">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-2">
           Purchases
@@ -43,20 +43,19 @@ export function UserOrdersPage() {
       {isHydrating ? (
         <div className="grid gap-6">
           {Array.from({ length: 3 }).map((_, index) => (
-            /* FIX: Darkened Skeleton to prevent the 'glare' while loading */
             <Skeleton key={index} className="h-64 rounded-[32px] bg-white/[0.03] animate-pulse" />
           ))}
         </div>
       ) : orders.length ? (
         <div className="grid gap-6">
           {orders.map((order) => (
-            <div 
-              key={order.id} 
+            <div
+              key={order.id}
               className="relative overflow-hidden rounded-[32px] border p-6 sm:p-8 transition-all duration-300"
               style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
             >
               <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-                
+
                 {/* LEFT: Order Content */}
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-4 mb-2">
@@ -72,37 +71,36 @@ export function UserOrdersPage() {
                       </Badge>
                     )}
                   </div>
-                  
+
                   <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--text-muted)' }}>
                     Ordered {formatDateTime(order.placedAt)} <span className="mx-2 opacity-50">•</span> Payment: {order.paymentMethod}
                   </p>
 
                   <div className="flex flex-wrap items-center gap-3 mb-6">
                     <div className="flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-4 py-2">
-                       <div className={`h-2 w-2 rounded-full ${order.trackingStatus === 'Delivered' ? 'bg-emerald-500' : 'bg-orange-500 animate-pulse'}`} />
-                       <span className="text-xs font-black uppercase text-white/70">Status: {order.trackingStatus}</span>
+                      <div className={`h-2 w-2 rounded-full ${order.trackingStatus === 'Delivered' ? 'bg-emerald-500' : 'bg-orange-500 animate-pulse'}`} />
+                      <span className="text-xs font-black uppercase text-white/70">Status: {order.trackingStatus}</span>
                     </div>
 
                     {order.riderName && (
-                       <div className="flex items-center gap-2 rounded-full bg-teal-500/10 border border-teal-500/20 px-4 py-2">
-                          <span className="text-xs font-black uppercase text-teal-400">Rider: {order.riderName} ({order.riderPhone})</span>
-                       </div>
+                      <div className="flex items-center gap-2 rounded-full bg-teal-500/10 border border-teal-500/20 px-4 py-2">
+                        <span className="text-xs font-black uppercase text-teal-400">Rider: {order.riderName} ({order.riderPhone})</span>
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="grid gap-3">
                     {order.items.map((item) => (
-                      /* FIX: Solid background (#13131a) to kill the white-box glare */
-                      <div 
-                        key={item.productId} 
+                      <div
+                        key={item.productId}
                         className="group flex items-center gap-5 rounded-[22px] border p-4 transition-all"
                         style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
                       >
-                        <img 
-                          alt={item.name} 
-                          className="h-16 w-16 rounded-[14px] object-cover border shadow-sm group-hover:scale-105 transition-transform" 
+                        <img
+                          alt={item.name}
+                          className="h-16 w-16 rounded-[14px] object-cover border shadow-sm group-hover:scale-105 transition-transform"
                           style={{ borderColor: 'var(--border)' }}
-                          src={item.image} 
+                          src={item.image}
                         />
                         <div className="flex-1">
                           <p className="font-bold tracking-wide text-lg" style={{ color: 'var(--text-main)' }}>{item.name}</p>
@@ -116,7 +114,6 @@ export function UserOrdersPage() {
                 </div>
 
                 {/* RIGHT: Order Summary Box */}
-                {/* RIGHT: Order Summary Box */}
                 <div
                   className="rounded-[28px] border p-6 shadow-sm lg:w-72 flex flex-col justify-center"
                   style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
@@ -125,13 +122,13 @@ export function UserOrdersPage() {
                   <p className="font-display text-4xl font-black" style={{ color: 'var(--text-main)' }}>
                     {formatCurrency(order.totalPrice || order.total)}
                   </p>
-                  
+
                   <div className="mt-6 flex items-center gap-3 border-t pt-5 text-[11px] font-bold uppercase tracking-wider" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
                     <ClipboardList className="h-4 w-4 text-orange-500" />
                     ID: <span className="font-mono">{order.id}</span>
                   </div>
                 </div>
-                
+
               </div>
             </div>
           ))}

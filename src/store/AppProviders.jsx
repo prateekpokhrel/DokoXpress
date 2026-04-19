@@ -4,7 +4,6 @@ import { injectSessionUserUpdater, MarketplaceProvider } from './MarketplaceCont
 import { ToastProvider } from './ToastContext';
 import './AppProviders.css';
 
-// Inner wrapper that wires AuthContext's updateSessionUser into MarketplaceContext
 function SessionBridge({ children }) {
   const { updateSessionUser } = useAuth();
   useEffect(() => {

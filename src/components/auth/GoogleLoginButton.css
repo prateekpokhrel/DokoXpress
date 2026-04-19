@@ -1,6 +1,5 @@
 /* Styles for GoogleLoginButton.jsx */
 
-/* Button specific tweaks to ensure text sizing perfectly matches standard inputs */
 .group span {
   font-size: 15px;
   letter-spacing: 0.3px;

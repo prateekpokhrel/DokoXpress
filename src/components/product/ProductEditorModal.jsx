@@ -138,13 +138,13 @@ export function ProductEditorModal({ open, product, onClose, onSubmit }) {
           {...register('stock')}
         />
 
-        {/* ---- IMAGE UPLOAD using native label → input (most reliable) ---- */}
+        {/* Image Upload using native label to input (most reliable) */}
         <div className="md:col-span-2 mt-2">
           <span className="block text-[11px] font-black uppercase tracking-[0.15em] text-white/50 ml-1 mb-2">
             Product Image
           </span>
 
-          {/* The label IS the clickable area — clicking it opens the file picker natively */}
+          {/* The label IS the clickable area clicking it opens the file picker natively */}
           <label
             htmlFor="product-image-upload"
             className="group relative flex h-36 w-full cursor-pointer items-center justify-center rounded-[12px] border-2 border-dashed transition-all overflow-hidden"
@@ -170,7 +170,7 @@ export function ProductEditorModal({ open, product, onClose, onSubmit }) {
               </div>
             )}
 
-            {/* Hidden native file input — triggered by the parent label */}
+            {/* Hidden native file input - triggered by the parent label */}
             <input
               id="product-image-upload"
               type="file"

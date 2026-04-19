@@ -33,7 +33,7 @@
   --hp-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ── Base ── */
+/*  Base  */
 .hp-root {
   font-family: var(--hp-font-body);
   background: var(--hp-bg);
@@ -236,7 +236,7 @@
   }
 }
 
-/* ── Badge ── */
+/*  Badge  */
 .hp-badge-wrap {
   display: inline-flex;
   align-items: center;
@@ -266,7 +266,7 @@
   color: var(--hp-amber-light);
 }
 
-/* ── Headline ── */
+/*  Headline  */
 .hp-headline {
   font-family: var(--hp-font-display);
   font-size: clamp(2.4rem, 5vw, 3.8rem);
@@ -285,7 +285,7 @@
   display: inline-block;
 }
 
-/* ── Sub-headline ── */
+/*  Sub-headline  */
 .hp-subheadline {
   margin-top: 1.5rem;
   max-width: 30rem;
@@ -295,7 +295,7 @@
   color: var(--hp-text-3);
 }
 
-/* ── CTA Buttons ── */
+/*  CTA Buttons  */
 .hp-cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -375,7 +375,7 @@
   color: var(--hp-text-1);
 }
 
-/* ── Trust Pills ── */
+/*  Trust Pills  */
 .hp-trust-row {
   display: flex;
   flex-wrap: wrap;

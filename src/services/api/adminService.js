@@ -34,7 +34,7 @@ export async function approveVendor(vendorId) {
   return simulateNetwork(() => {
     const updated = updateMockDatabase((database) => ({
       ...database,
-// ... rest of previous code (keeping it for reference/fallback)
+
       vendors: database.vendors.map((vendor) =>
         vendor.id === vendorId ? { ...vendor, verificationStatus: 'verified' } : vendor,
       ),

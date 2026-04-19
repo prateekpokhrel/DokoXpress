@@ -1,6 +1,4 @@
-/* ==========================================================================
-   UserOrdersPage.css - Premium Dark Order History
-   ========================================================================== */
+/* UserOrdersPage.css */
 
 .orders-fade-in {
   animation: ordersEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -11,6 +9,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -18,16 +17,16 @@
 }
 
 .order-card-glow {
-  box-shadow: 
-    0 20px 40px -15px rgba(0, 0, 0, 0.8), 
+  box-shadow:
+    0 20px 40px -15px rgba(0, 0, 0, 0.8),
     inset 0 0 30px -5px rgba(255, 255, 255, 0.02);
 }
 
-/* Fix for potential inherited text colors in EmptyState or Skeleton */
 .orders-fade-in .Skeleton {
   background-color: rgba(255, 255, 255, 0.03) !important;
 }
 
-.orders-fade-in h2, .orders-fade-in h3 {
+.orders-fade-in h2,
+.orders-fade-in h3 {
   color: #ffffff;
 }

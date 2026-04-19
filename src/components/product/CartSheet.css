@@ -1,11 +1,9 @@
 /* Styles for CartSheet.jsx */
 
-/* Simple fade for the backdrop */
 .cart-overlay {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
-/* Slide in from the right with a spring effect */
 .cart-panel {
   animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   box-shadow: -20px 0 50px -10px rgba(213, 247, 254, 0.8);

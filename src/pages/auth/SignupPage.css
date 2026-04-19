@@ -1,15 +1,9 @@
 /* Styles for SignupPage.jsx */
 
-/* ==========================================================================
-   SignupPage.css - Premium Animations & Dark Inputs
-   ========================================================================== */
-
-/* 1. ROLE TAB BAR GLOW */
 .role-tab-bar {
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.02);
 }
 
-/* 2. CUSTOM DARK CHECKBOX */
 .checkbox-wrapper {
   display: flex;
   align-items: center;
@@ -58,7 +52,6 @@
   transform: translate(-50%, -50%);
 }
 
-/* 3. FORM ENTRANCE ANIMATION */
 .animate-in {
   animation: formSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -68,6 +61,7 @@
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -79,6 +73,11 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

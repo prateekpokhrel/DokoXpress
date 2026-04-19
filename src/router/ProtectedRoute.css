@@ -1,7 +1,5 @@
 /* Styles for ProtectedRoute.jsx */
 
-/* ---------- FULLSCREEN WRAPPER ---------- */
-
 .protected-loading {
     display: grid;
     place-items: center;
@@ -9,7 +7,7 @@
     background: var(--bg-main, #f8fafc);
 }
 
-/* ---------- LOADING CARD ---------- */
+/*  LOADING CARD  */
 
 .protected-card {
     border-radius: 24px;
@@ -26,7 +24,7 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* ---------- LOADER DOT ---------- */
+/*  LOADER DOT  */
 
 .protected-spinner {
     width: 18px;
@@ -37,14 +35,14 @@
     animation: spin 0.7s linear infinite;
 }
 
-/* ---------- TEXT ---------- */
+/*  TEXT  */
 
 .protected-text {
     font-weight: 500;
     letter-spacing: 0.02em;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/*  ANIMATIONS  */
 
 @keyframes spin {
     to {
@@ -64,7 +62,7 @@
     }
 }
 
-/* ---------- OPTIONAL BACKGROUND VARIANT ---------- */
+/*  OPTIONAL BACKGROUND VARIANT  */
 
 .bg-sand {
     background: linear-gradient(135deg,
@@ -73,7 +71,7 @@
             #fff7ed 100%);
 }
 
-/* ---------- MOBILE ---------- */
+/*  MOBILE  */
 
 @media (max-width: 640px) {
     .protected-card {

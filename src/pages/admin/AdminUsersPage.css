@@ -1,13 +1,11 @@
 /* Styles for AdminUsersPage.jsx */
 
-/* ---------- PAGE ROOT ---------- */
-
 .admin-users-page {
     width: 100%;
     animation: fadeIn 0.3s ease;
 }
 
-/* ---------- CARD TABLE WRAPPER ---------- */
+/* Card Table Wrapper */
 
 .admin-users-card {
     border-radius: 24px;
@@ -16,7 +14,7 @@
     border: 1px solid var(--border, #e2e8f0);
 }
 
-/* ---------- TABLE ---------- */
+/* Table */
 
 .admin-users-table {
     width: 100%;
@@ -24,7 +22,7 @@
     font-size: 14px;
 }
 
-/* ---------- TABLE HEADER ---------- */
+/* Table Header */
 
 .admin-users-table thead {
     background: #f8fafc;
@@ -39,7 +37,7 @@
     letter-spacing: 0.02em;
 }
 
-/* ---------- TABLE BODY ---------- */
+/* Table Body */
 
 .admin-users-table td {
     padding: 14px 20px;
@@ -58,7 +56,7 @@
     transform: scale(1.002);
 }
 
-/* ---------- USER INFO ---------- */
+/* User Info */
 
 .admin-user-name {
     font-weight: 600;
@@ -71,13 +69,13 @@
     margin-top: 2px;
 }
 
-/* ---------- TEXT COLORS ---------- */
+/* Text Colors */
 
 .admin-muted {
     color: #475569;
 }
 
-/* ---------- EMPTY STATE ---------- */
+/* Empty State */
 
 .admin-users-empty {
     text-align: center;
@@ -86,14 +84,14 @@
     font-size: 14px;
 }
 
-/* ---------- SKELETON ---------- */
+/* Skeleton */
 
 .admin-users-skeleton {
     border-radius: 24px;
     animation: pulse 1.5s infinite ease-in-out;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/* Animations */
 
 @keyframes fadeIn {
     from {
@@ -121,7 +119,7 @@
     }
 }
 
-/* ---------- SCROLL (HORIZONTAL) ---------- */
+/* Scroll (Horizontal) */
 
 .admin-users-scroll {
     overflow-x: auto;
@@ -136,7 +134,7 @@
     border-radius: 999px;
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* Responsive */
 
 @media (max-width: 768px) {
 

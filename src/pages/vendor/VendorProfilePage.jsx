@@ -30,10 +30,10 @@ export function VendorProfilePage() {
   const { user } = useAuth();
   const { saveVendorProfile } = useMarketplace();
   const { showToast } = useToast();
-  
+
   const [citizenshipPreview, setCitizenshipPreview] = useState('');
   const [licensePreview, setLicensePreview] = useState('');
-  
+
   const {
     register,
     reset,
@@ -59,7 +59,6 @@ export function VendorProfilePage() {
       return;
     }
 
-    // Safely access storeAddress fields with fallbacks to prevent crashes
     reset({
       fullName: user.fullName || '',
       phone: user.phone || '',
@@ -98,8 +97,8 @@ export function VendorProfilePage() {
       />
 
       <div className="grid gap-5 xl:grid-cols-[0.85fr_1.15fr]">
-        
-        {/* ================= LEFT: VENDOR SUMMARY CARD ================= */}
+
+        {/* LEFT: VENDOR SUMMARY CARD */}
         <Card
           className="border p-8 shadow-sm flex flex-col vendor-card-animate"
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
@@ -120,7 +119,7 @@ export function VendorProfilePage() {
               <p className="mt-1 text-sm font-medium" style={{ color: 'var(--text-muted)' }}>{user.email}</p>
             </div>
           </div>
-          
+
           <div className="mt-6 flex flex-wrap gap-3">
             <Badge variant={getVerificationVariant(user.verificationStatus)}>
               {user.verificationStatus}
@@ -129,7 +128,7 @@ export function VendorProfilePage() {
               {user.storeAddress?.city || 'No City'}, {user.storeAddress?.state || 'No State'}
             </Badge>
           </div>
-          
+
           <div
             className="mt-8 space-y-4 rounded-2xl border p-5 shadow-sm"
             style={{ backgroundColor: 'var(--bg-subtle)', borderColor: 'var(--border)' }}
@@ -139,7 +138,7 @@ export function VendorProfilePage() {
               <div>
                 <p className="font-semibold" style={{ color: 'var(--text-main)' }}>Citizenship document</p>
                 <p className="mt-1 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                  {user.citizenshipDocument ? '✅ Document attached automatically' : '❌ Not uploaded yet'}
+                  {user.citizenshipDocument ? 'Document attached.' : 'Not uploaded yet.'}
                 </p>
               </div>
             </div>
@@ -148,14 +147,14 @@ export function VendorProfilePage() {
               <div>
                 <p className="font-semibold" style={{ color: 'var(--text-main)' }}>Store license</p>
                 <p className="mt-1 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                  {user.storeLicense ? '✅ License attached automatically' : '❌ Not uploaded yet'}
+                  {user.storeLicense ? 'License attached.' : 'Not uploaded yet.'}
                 </p>
               </div>
             </div>
           </div>
         </Card>
 
-        {/* ================= RIGHT: UPDATE FORM CARD ================= */}
+        {/* RIGHT: UPDATE FORM CARD */}
         <Card
           className="border shadow-sm vendor-card-animate"
           style={{ animationDelay: '100ms', backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
@@ -198,14 +197,14 @@ export function VendorProfilePage() {
             <div className="md:col-span-2">
               <FormField error={errors.fullName?.message} label="Owner Full Name" placeholder="e.g. John Doe" {...register('fullName')} />
             </div>
-            
-            <FormField error={errors.phone?.message} label="Phone Number" placeholder="+1 (555) 000-0000" {...register('phone')} />
-            <FormField error={errors.storeName?.message} label="Store Name" placeholder="e.g. Fresh Foods Market" {...register('storeName')} />
-            <FormField error={errors.country?.message} label="Country" placeholder="e.g. United States" {...register('country')} />
-            <FormField error={errors.state?.message} label="State" placeholder="e.g. California" {...register('state')} />
-            
+
+            <FormField error={errors.phone?.message} label="Phone Number" placeholder="+977 9865 9865 98" {...register('phone')} />
+            <FormField error={errors.storeName?.message} label="Store Name" placeholder="e.g. Bhatbhateni" {...register('storeName')} />
+            <FormField error={errors.country?.message} label="Country" placeholder="e.g. Nepal" {...register('country')} />
+            <FormField error={errors.state?.message} label="District" placeholder="e.g. Morang" {...register('district')} />
+
             <div className="md:col-span-2">
-              <FormField error={errors.city?.message} label="City" placeholder="e.g. Los Angeles" {...register('city')} />
+              <FormField error={errors.city?.message} label="City" placeholder="e.g. Biratnagar" {...register('city')} />
             </div>
 
             <div className="md:col-span-2 mt-2">
@@ -237,7 +236,7 @@ export function VendorProfilePage() {
                 <input type="file" name="file_upload" className="hidden" accept="image/*,.pdf" onChange={handleDocumentChange('storeLicense', setLicensePreview)} />
               </label>
             </div>
-            
+
             <div className="md:col-span-2 mt-4 flex justify-end">
               <Button loading={isSubmitting} type="submit" variant="secondary" className="transition-transform hover:scale-[1.02]">
                 Save vendor profile

@@ -10,6 +10,7 @@
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -17,12 +18,16 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
-  /* Removed transform to prevent breaking fixed-position children */
   animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -41,13 +46,9 @@
 }
 
 
-/* =========================================================
-   DARK THEME OVERRIDE FOR <ProductFilters />
-   (Forces uneditable light-mode children to become dark)
-   ========================================================= */
+/* DARK THEME OVERRIDE FOR <ProductFilters /> */
 
-/* The main container rendered by ProductFilters */
-.dark-theme-filters > div {
+.dark-theme-filters>div {
   background-color: #0a0a0e !important;
   border: 1px solid rgba(255, 255, 255, 0.05) !important;
   box-shadow: none !important;
@@ -64,7 +65,7 @@
 
 .dark-theme-filters input:focus,
 .dark-theme-filters select:focus {
-  border-color: rgba(249, 115, 22, 0.5) !important; /* Orange focus to match theme */
+  border-color: rgba(249, 115, 22, 0.5) !important;
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.1) !important;
 }
@@ -73,13 +74,11 @@
   color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Any SVG icons inside the filter bar (like search or chevron icons) */
 .dark-theme-filters svg {
   color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Ensure text inside dropdowns is readable */
 .dark-theme-filters option {
-  background-color: #0f172a !important; 
+  background-color: #0f172a !important;
   color: white !important;
 }

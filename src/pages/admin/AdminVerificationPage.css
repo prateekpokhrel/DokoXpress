@@ -1,13 +1,11 @@
 /* Styles for AdminVerificationPage.jsx */
 
-/* ---------- PAGE ROOT ---------- */
-
 .admin-verify-page {
     width: 100%;
     animation: fadeIn 0.3s ease;
 }
 
-/* ---------- CARD ENHANCEMENT ---------- */
+/* Card Enhancement */
 
 .admin-verify-card {
     border-radius: 24px;
@@ -21,7 +19,7 @@
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
 
-/* ---------- HEADER ---------- */
+/* Header */
 
 .admin-verify-header {
     display: flex;
@@ -49,7 +47,7 @@
     color: #64748b;
 }
 
-/* ---------- DOCUMENT SECTION ---------- */
+/* Document Section */
 
 .admin-doc-section {
     margin-top: 20px;
@@ -61,7 +59,7 @@
     gap: 16px;
 }
 
-/* ---------- DOCUMENT BLOCK ---------- */
+/* Document Block */
 
 .admin-doc-block {
     display: flex;
@@ -75,7 +73,7 @@
     color: #94a3b8;
 }
 
-/* ---------- IMAGE PREVIEW ---------- */
+/* Image Preview */
 
 .admin-doc-image-wrapper {
     margin-top: 10px;
@@ -98,7 +96,7 @@
     transform: scale(1.05);
 }
 
-/* ---------- OVERLAY ---------- */
+/* Overlay */
 
 .admin-doc-overlay {
     position: absolute;
@@ -116,7 +114,7 @@
     opacity: 1;
 }
 
-/* ---------- FALLBACK TEXT ---------- */
+/* Fallback Text */
 
 .admin-doc-fallback {
     margin-top: 8px;
@@ -125,7 +123,7 @@
     color: #0f172a;
 }
 
-/* ---------- ACTION BUTTON ---------- */
+/* Action Button */
 
 .admin-verify-actions {
     margin-top: 20px;
@@ -144,14 +142,14 @@
     transform: translateY(-1px);
 }
 
-/* ---------- GRID ---------- */
+/* Grid */
 
 .admin-verify-grid {
     display: grid;
     gap: 16px;
 }
 
-/* ---------- EMPTY STATE ---------- */
+/* Empty State */
 
 .admin-verify-empty {
     text-align: center;
@@ -159,14 +157,14 @@
     color: #94a3b8;
 }
 
-/* ---------- SKELETON ---------- */
+/* Skeleton */
 
 .admin-verify-skeleton {
     border-radius: 24px;
     animation: pulse 1.5s infinite ease-in-out;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/* Animations */
 
 @keyframes fadeIn {
     from {
@@ -194,7 +192,7 @@
     }
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* Responsive */
 
 @media (max-width: 768px) {
     .admin-verify-title {

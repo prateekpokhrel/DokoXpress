@@ -65,17 +65,14 @@ export function VendorOrdersPage() {
                   </p>
                   <div className="mt-5 grid gap-3">
                     {order.items.map((item) => (
-                      /* FIXED: Changed bg-slate-50 to bg-white/5 and added border */
                       <div key={item.productId} className="rounded-2xl bg-white/5 border border-white/5 p-4 shadow-sm transition-transform hover:scale-[1.01]">
                         <div className="flex items-center justify-between gap-3">
                           <div>
-                            {/* FIXED: Changed text-slate-900 to text-white */}
                             <p className="font-semibold text-white">{item.name}</p>
                             <p className="mt-1 text-sm text-slate-400">
                               Qty {item.quantity} | {formatCurrency(item.price)}
                             </p>
                           </div>
-                          {/* FIXED: Changed text-slate-900 to text-white */}
                           <p className="font-semibold text-white">{formatCurrency(item.price * item.quantity)}</p>
                         </div>
                       </div>
@@ -83,10 +80,8 @@ export function VendorOrdersPage() {
                   </div>
                 </div>
 
-                {/* FIXED: Changed bg-slate-50 to bg-white/5 and added border */}
                 <div className="w-full rounded-3xl bg-white/5 border border-white/5 p-4 xl:max-w-xs shadow-sm">
                   <p className="text-sm font-medium text-slate-400">Update status</p>
-                  {/* FIXED: Changed bg-white to bg-black/20, text-slate-something to text-white, and updated borders */}
                   <select
                     className="status-select mt-3 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none transition-all focus:border-coral focus:ring-2 focus:ring-coral/20"
                     onChange={(event) => {

@@ -38,12 +38,13 @@ public class CartController {
     @org.springframework.transaction.annotation.Transactional
     public List<Cart> addToCart(@PathVariable Long userId, @RequestBody CartRequest request) {
         Long productId = request.getProductId();
-        if (productId == null) return getCart(userId);
+        if (productId == null)
+            return getCart(userId);
 
         // Handle possible multiple entries gracefully by taking the first one
         List<Cart> items = cartRepository.findByUserIdAndProductId(userId, productId);
         Cart existingItem = items.isEmpty() ? null : items.get(0);
-        
+
         if (existingItem != null) {
             int currentQty = existingItem.getQuantity() != null ? existingItem.getQuantity() : 0;
             existingItem.setQuantity(currentQty + 1);
@@ -52,7 +53,7 @@ public class CartController {
             Cart newItem = new Cart(userId, productId, 1);
             cartRepository.save(newItem);
         }
-        
+
         return getCart(userId);
     }
 
@@ -61,12 +62,13 @@ public class CartController {
     public List<Cart> updateCartQuantity(@PathVariable Long userId, @RequestBody CartRequest request) {
         Long productId = request.getProductId();
         Integer quantity = request.getQuantity();
-        
-        if (productId == null || quantity == null) return getCart(userId);
+
+        if (productId == null || quantity == null)
+            return getCart(userId);
 
         List<Cart> items = cartRepository.findByUserIdAndProductId(userId, productId);
         Cart existingItem = items.isEmpty() ? null : items.get(0);
-        
+
         if (existingItem != null) {
             if (quantity <= 0) {
                 cartRepository.delete(existingItem);
@@ -88,14 +90,25 @@ public class CartController {
         return getCart(userId);
     }
 
-    // --- DTO ---
+    // DTO
     public static class CartRequest {
         private Long productId;
         private Integer quantity;
 
-        public Long getProductId() { return productId; }
-        public void setProductId(Long productId) { this.productId = productId; }
-        public Integer getQuantity() { return quantity; }
-        public void setQuantity(Integer quantity) { this.quantity = quantity; }
+        public Long getProductId() {
+            return productId;
+        }
+
+        public void setProductId(Long productId) {
+            this.productId = productId;
+        }
+
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(Integer quantity) {
+            this.quantity = quantity;
+        }
     }
 }

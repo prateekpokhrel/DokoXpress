@@ -47,7 +47,7 @@ export async function upsertVendorProduct(vendorId, payload) {
       imageUrl: payload.image ?? payload.imageUrl ?? null,
     };
     if (payload.id) {
-      // Update existing product via PUT
+      // Update existing product
       await apiClient.put(`/products/${payload.id}`, body);
     } else {
       await apiClient.post('/products', body);

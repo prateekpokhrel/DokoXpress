@@ -1,13 +1,11 @@
 /* Styles for AdminVendorsPage.jsx */
 
-/* ---------- PAGE ROOT ---------- */
-
 .admin-vendors-page {
     width: 100%;
     animation: fadeIn 0.3s ease;
 }
 
-/* ---------- CARD WRAPPER ---------- */
+/* Card Wrapper */
 
 .admin-vendors-card {
     border-radius: 24px;
@@ -16,7 +14,7 @@
     border: 1px solid var(--border, #e2e8f0);
 }
 
-/* ---------- TABLE ---------- */
+/* Table */
 
 .admin-vendors-table {
     width: 100%;
@@ -24,7 +22,7 @@
     font-size: 14px;
 }
 
-/* ---------- HEADER ---------- */
+/* Header */
 
 .admin-vendors-table thead {
     background: #f8fafc;
@@ -38,7 +36,7 @@
     text-align: left;
 }
 
-/* ---------- BODY ---------- */
+/* Body */
 
 .admin-vendors-table td {
     padding: 14px 20px;
@@ -57,7 +55,7 @@
     transform: scale(1.002);
 }
 
-/* ---------- VENDOR INFO ---------- */
+/* Vendor Info */
 
 .admin-vendor-name {
     font-weight: 600;
@@ -70,33 +68,33 @@
     margin-top: 2px;
 }
 
-/* ---------- OWNER TEXT ---------- */
+/* Owner Text */
 
 .admin-vendor-owner {
     color: #475569;
     font-weight: 500;
 }
 
-/* ---------- LOCATION ---------- */
+/* Location */
 
 .admin-vendor-location {
     color: #475569;
 }
 
-/* ---------- STATUS BADGE WRAPPER ---------- */
+/* Status Badge Wrapper */
 
 .admin-vendor-status {
     display: inline-flex;
     align-items: center;
 }
 
-/* ---------- DATE ---------- */
+/* Date */
 
 .admin-vendor-date {
     color: #64748b;
 }
 
-/* ---------- EMPTY STATE ---------- */
+/* Empty State */
 
 .admin-vendors-empty {
     text-align: center;
@@ -105,14 +103,14 @@
     font-size: 14px;
 }
 
-/* ---------- SKELETON ---------- */
+/* Skeleton */
 
 .admin-vendors-skeleton {
     border-radius: 24px;
     animation: pulse 1.5s infinite ease-in-out;
 }
 
-/* ---------- SCROLL ---------- */
+/* Scroll */
 
 .admin-vendors-scroll {
     overflow-x: auto;
@@ -127,7 +125,7 @@
     border-radius: 999px;
 }
 
-/* ---------- ANIMATIONS ---------- */
+/* Animations */
 
 @keyframes fadeIn {
     from {
@@ -155,7 +153,7 @@
     }
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* Responsive */
 
 @media (max-width: 768px) {
 

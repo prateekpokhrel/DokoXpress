@@ -6,7 +6,7 @@ export function EmptyState({ icon: Icon, title, description, actionLabel, onActi
   return (
     <Card className="flex flex-col items-center justify-center px-8 py-16 text-center border-dashed">
 
-      {/* ✅ SAFE ICON RENDER */}
+      {/* SAFE ICON RENDER */}
       {Icon && (
         <div className="mb-6 rounded-3xl bg-white/5 border border-white/10 p-5 text-orange-500 shadow-inner">
           <Icon className="h-10 w-10" />

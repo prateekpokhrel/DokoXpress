@@ -1,6 +1,5 @@
 /* ── FormField.css — Light Theme ── */
 
-/* Autofill override: keep the input light when Chrome fills credentials */
 .form-field-container input:-webkit-autofill,
 .form-field-container input:-webkit-autofill:hover,
 .form-field-container input:-webkit-autofill:focus,

@@ -84,7 +84,7 @@ export function UserProfilePage() {
 
       <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
 
-        {/* ===== LEFT: PROFILE SUMMARY CARD ===== */}
+        {/* LEFT: PROFILE SUMMARY CARD */}
         <div
           className="relative overflow-hidden rounded-[32px] border p-8 shadow-sm h-fit"
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
@@ -156,7 +156,7 @@ export function UserProfilePage() {
           </div>
         </div>
 
-        {/* ===== RIGHT: EDIT FORM ===== */}
+        {/* RIGHT: EDIT FORM */}
         <div
           className="rounded-[32px] border p-8 shadow-sm"
           style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}

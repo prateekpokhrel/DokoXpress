@@ -23,9 +23,9 @@ export function VendorProductsPage() {
   // Guard: vendor only
   if (!user || user.role !== 'vendor') return null;
 
-  const vendorId = Number(user.id); // backend expects Long
+  const vendorId = Number(user.id);
 
-  // ── Fetch this vendor's products from backend ─────────────────────────────
+  // Fetch this vendor's products from backend 
   const fetchProducts = useCallback(async () => {
     setIsHydrating(true);
     try {
@@ -37,7 +37,7 @@ export function VendorProductsPage() {
       setProducts(mine);
     } catch (err) {
       console.error('Fetch error:', err);
-      showToast({ title: 'Failed to load products ❌', variant: 'error' });
+      showToast({ title: 'Failed to load products', variant: 'error' });
     } finally {
       setIsHydrating(false);
     }
@@ -47,21 +47,21 @@ export function VendorProductsPage() {
     fetchProducts();
   }, [fetchProducts]);
 
-  // ── Build backend-compatible payload ─────────────────────────────────────
+  // Build backend-compatible payload 
   function buildPayload(values) {
     return {
-      vendorId,                                           // Long on backend
+      vendorId,
       name: values.name,
       description: values.description ?? '',
       price: Number(values.price),
       stock: Number(values.stock ?? 0),
       category: values.category ?? '',
-      status: (values.status ?? 'active').toUpperCase(), // backend: ACTIVE / DRAFT
-      imageUrl: values.image ?? null,                    // backend field name
+      status: (values.status ?? 'active').toUpperCase(),
+      imageUrl: values.image ?? null,
     };
   }
 
-  // ── Save: create or update ────────────────────────────────────────────────
+  // Save: create or update 
   const handleSubmit = async (values) => {
     try {
       const payload = buildPayload(values);
@@ -72,7 +72,7 @@ export function VendorProductsPage() {
       }
       await fetchProducts();
       showToast({
-        title: values.id ? 'Product updated ✅' : 'Product added ✅',
+        title: values.id ? 'Product updated' : 'Product added',
         variant: 'success',
       });
       setEditorOpen(false);
@@ -80,22 +80,22 @@ export function VendorProductsPage() {
     } catch (err) {
       console.error('Save error:', err?.response?.data ?? err.message);
       showToast({
-        title: 'Failed to save product ❌',
+        title: 'Failed to save product',
         description: err?.response?.data?.message ?? err.message,
         variant: 'error',
       });
     }
   };
 
-  // ── Delete ────────────────────────────────────────────────────────────────
+  // Delete 
   const handleDelete = async (productId) => {
     if (!window.confirm('Delete this product?')) return;
     try {
       await apiClient.delete(`/products/${productId}`);
       await fetchProducts();
-      showToast({ title: 'Product deleted ✅', variant: 'success' });
+      showToast({ title: 'Product deleted', variant: 'success' });
     } catch (err) {
-      showToast({ title: 'Delete failed ❌', variant: 'error' });
+      showToast({ title: 'Delete failed', variant: 'error' });
     }
   };
 
@@ -162,11 +162,10 @@ export function VendorProductsPage() {
                 <td className="p-3">{product.stock ?? 0}</td>
                 <td className="p-3">
                   <span
-                    className={`text-xs font-bold uppercase px-2 py-1 rounded-full ${
-                      product.status === 'ACTIVE' || product.status === 'active'
+                    className={`text-xs font-bold uppercase px-2 py-1 rounded-full ${product.status === 'ACTIVE' || product.status === 'active'
                         ? 'bg-green-500/20 text-green-400'
                         : 'bg-white/10 text-white/40'
-                    }`}
+                      }`}
                   >
                     {product.status?.toLowerCase() ?? 'active'}
                   </span>

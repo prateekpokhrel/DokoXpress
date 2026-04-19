@@ -18,7 +18,7 @@ export function DashboardLayout() {
 
   if (!role || !user) return null;
 
-  // VERIFICATION GATE: If vendor is pending, show them the pending notice instead of standard dashboard
+  // Verification Gate: If vendor is pending, show them the pending notice instead of standard dashboard
   const isPendingVendor = role === 'vendor' && user.verificationStatus === 'pending';
 
   const displayName = user?.fullName || user?.name || 'User';

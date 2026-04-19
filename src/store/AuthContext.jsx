@@ -24,7 +24,6 @@ export function AuthProvider({ children }) {
       return;
     }
 
-    // If the session already contains a cached user object (from backend login), use it directly
     if (storedSession.user) {
       setSession(storedSession);
       setUser(storedSession.user);
@@ -32,7 +31,6 @@ export function AuthProvider({ children }) {
       return;
     }
 
-    // Fallback: try to find in mock database
     const database = snapshot ?? readMockDatabase();
     const account = findAccountById(database, storedSession.userId);
 
@@ -61,7 +59,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Called after profile updates to keep session.user in sync with latest data
   function updateSessionUser(updatedUser) {
     setUser((prev) => ({ ...prev, ...updatedUser }));
     const storedSession = readStoredSession();

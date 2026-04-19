@@ -24,7 +24,7 @@ export function HomePage() {
   return (
     <div className="hp-root">
 
-      {/* ── HERO ── */}
+      {/*  HERO  */}
       <section className="hp-hero">
 
         {/* Ambient glow orbs */}
@@ -37,7 +37,7 @@ export function HomePage() {
 
         <div className="hp-hero-inner">
 
-          {/* ── LEFT COLUMN ── */}
+          {/*  LEFT COLUMN  */}
           <div className="hp-hero-left">
 
             <div className="hp-badge-wrap hp-anim hp-anim--1">
@@ -83,7 +83,7 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* ── RIGHT STAT GRID ── */}
+          {/*  RIGHT STAT GRID  */}
           <div className="hp-stat-grid hp-anim hp-anim--3">
             <StatCard
               icon={<ShoppingBag className="hp-stat-icon hp-stat-icon--amber" />}
@@ -117,14 +117,14 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION LABEL ── */}
+      {/*  SECTION LABEL  */}
       <div className="hp-section-eyebrow">
         <span className="hp-section-line" />
         <span className="hp-section-label-text">Platform Roles</span>
         <span className="hp-section-line" />
       </div>
 
-      {/* ── FEATURES ── */}
+      {/*  FEATURES  */}
       <section className="hp-features">
         <FeatureCard
           role="Customer"
@@ -161,9 +161,7 @@ export function HomePage() {
 }
 
 
-/* ═══════════════════════════════════════════
-   STAT CARD
-═══════════════════════════════════════════ */
+/* Stat Card */
 function StatCard({ icon, value, label, imagePath, accent }) {
   return (
     <div className={`hp-stat-card hp-stat-card--${accent}`}>
@@ -196,9 +194,7 @@ function StatCard({ icon, value, label, imagePath, accent }) {
 }
 
 
-/* ═══════════════════════════════════════════
-   FEATURE CARD
-═══════════════════════════════════════════ */
+/* Feature Card */
 function FeatureCard({ role, emoji, title, description, gradient, route, delay }) {
   const navigate = useNavigate();
   return (
