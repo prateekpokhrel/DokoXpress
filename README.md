@@ -108,6 +108,7 @@ npm run dev
 | **Admin** | `admin@dokoxpress.com` | `Developer_Secret` |
 | **Vendor** | `milan.vendor@dokoxpress.com` | `Developer_Secret` |
 | **Customer** | `ava.customer@dokoxpress.com` | `Developer_Secret` |
+| **Delivery Patner** | `ava.rider@dokoxpress.com` | `Developer_Secret` |
 
 ---
 
