@@ -24,7 +24,7 @@ DokoXpress provides a unified digital bridge with specialized interfaces for all
 *   **Hyper-Local Relevance**: Products matching the user's city are automatically prioritized using "City-Weighting" logic.
 *   **15-Minute Badge**: Visual markers for products ready for "Express Delivery" within local hubs.
 *   **Floating Island Cart**: A compact, floating UI that manages items without page navigation.
-*   **Immersive Payment Flow**: A centered, background-blurred `PaymentModal` that supports diverse methods (COD, UPI, Card).
+*   **Immersive Payment Flow**: A centered, background-blurred `PaymentModal` that supports diverse methods (COD, Esewa/Fonepay/Khalti, Card).
 
 #### B. Vendor Management Portal
 *   **Digital Storefront**: Easy inventory management for local shop owners.
