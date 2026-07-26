@@ -134,6 +134,6 @@ npm run dev
 ##  Author
 **Pratik Pokhrel**  
 Full-Stack Developer | Nepali Market Specialization  
-*Developed as a Capstone Project for DokoXpress.*
+*DokoXpress - Developed as a Capstone Project.*
 
 ---
