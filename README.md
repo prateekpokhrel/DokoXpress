@@ -133,13 +133,13 @@ npm run dev
 
 ## Project Team
 
-**Pratik Pokhrel (Project Lead)** - Responsive Frontend | Database Design | REST API Integration | System Architecture | Project Coordination
+**Pratik Pokhrel** - Responsive Frontend Development | Database Design | REST API Integration | System Architecture | Project Coordination
 
-**Aditya Kuwar (Backend Developer)** - Backend Development | REST API Development | Database Management
+**Aditya Kuwar** - Backend Development | REST API Development | Database Management
 
-**Sumit Thapa (UI/UX & Market Research)** - UI/UX Design | Market Research | User Experience Analysis
+**Sumit Thapa** - UI/UX Design | Market Research | User Experience Analysis
 
-**Swaswat Aryal (Frontend Developer & QA)** - Frontend Development | Testing | Quality Assurance
+**Swaswat Aryal** - Frontend Development | Testing | Quality Assurance
 
 *DokoXpress – Developed as a Capstone Project to provide a secure, AI-powered, multi-vendor e-commerce platform for Nepal.*
 
